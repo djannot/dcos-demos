@@ -1,0 +1,40 @@
+
+read_kt hdfs.name-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.name-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.name-0-zkfc.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.name-0-zkfc.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.name-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.name-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.name-1-zkfc.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.name-1-zkfc.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.journal-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.journal-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.journal-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.journal-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.journal-2-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.journal-2-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.data-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.data-0-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.data-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.data-1-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.data-2-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.data-2-node.bigdataparisproddataserviceshdfs.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt HTTP.api.bigdataparisproddataserviceshdfs.marathon.l4lb.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-0-server.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-1-server.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-2-server.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-0-node.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-1-node.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt zookeeper.zookeeper-2-node.bigdataparisproddataserviceskafka-zookeeper.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt kafka.kafka-0-broker.bigdataparisproddataserviceskafka.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt kafka.kafka-1-broker.bigdataparisproddataserviceskafka.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt kafka.kafka-2-broker.bigdataparisproddataserviceskafka.autoip.dcos.thisdcos.directory.MESOS.LAB
+read_kt hdfs.MESOS.LAB
+read_kt client.MESOS.LAB
+read_kt user1.MESOS.LAB
+read_kt nifiprincipal.MESOS.LAB
+read_kt nifiadmin.MESOS.LAB
+read_kt nobody.MESOS.LAB
+list
+write_kt merged.keytab
+quit

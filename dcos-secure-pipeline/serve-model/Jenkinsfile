@@ -1,0 +1,47 @@
+def gitCommit() {
+        sh "git rev-parse HEAD > GIT_COMMIT"
+        def gitCommit = readFile('GIT_COMMIT').trim()
+        sh "rm -f GIT_COMMIT"
+        return gitCommit
+    }
+
+    node {
+        // Checkout source code from Git
+        stage 'Checkout'
+        checkout scm
+
+        dir ('.') {
+        // Build Docker image
+        stage 'Build'
+        sh "docker build -t ${env.DOCKERHUB_REPO} ."
+
+        stage 'Test'
+        sh "ls"
+
+
+        // Log in and push image to GitLab
+        stage 'Publish'
+        withCredentials(
+            [[
+                $class: 'UsernamePasswordMultiBinding',
+                credentialsId: 'dockerhub',
+                passwordVariable: 'DOCKERHUB_PASSWORD',
+                usernameVariable: 'DOCKERHUB_USERNAME'
+            ]]
+        ) {
+            sh "docker login -u ${env.DOCKERHUB_USERNAME} -p ${env.DOCKERHUB_PASSWORD}"
+            sh "docker push ${env.DOCKERHUB_REPO}"
+        }
+    }
+
+    // Deploy
+    stage 'Deploy'
+    	sh "if [ ! -f ./kubectl ]; then wget -q https://storage.googleapis.com/kubernetes-release/release/v1.10.7/bin/linux/amd64/kubectl; fi"
+	    sh "chmod +x ./kubectl"
+                sh "./kubectl config set-credentials jenkins --token=eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImplbmtpbnMtc2VjcmV0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImplbmtpbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiI4Y2NkODAyOS00MjU3LTExZTktODZhNi03ZWFlNDU1ZjgwNWIiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpqZW5raW5zIn0.G-E1LvaNjkWlLruWkx_M0ostVSTPc3ggBDgOTwugGRiOvAMknSkUx5dEm6kj6OVZTBIci2J_e37D3_xmkbPQluUWAUnC7GMNixdf6VJxdDUKr2Ahi2uEXUeGO9FkBxyNh4PieDdRX_JOho1igGEOophyzFRJwCjBmo5R7E0Fa__iA1Or7X_X9z9VVXHvd2yTg8HU3c1d44N1lU_COydw2wgs7jSOAwJzvM4BqYv26j3Bcoudus5Tb7j99oTW5jNlHrLzhrN2yYKpL5g0OBLv_miHoAHPRHzDpz37607BQC4xKmddOl5niV-m2NsJAbZ-J66Pa4ClQD2XzWg-rJ9IBg"
+        sh "./kubectl config set-cluster dcos-k8s --server=https://apiserver.bigdataparisprodk8scluster1.l4lb.thisdcos.directory:6443 --insecure-skip-tls-verify"
+        sh "./kubectl config set-context dcos-k8s --cluster=dcos-k8s --namespace=default --user=jenkins"
+        sh "./kubectl config use-context dcos-k8s"
+        sh "./kubectl get pods"
+        sh "./kubectl apply --force -f serve-model.yaml"
+    }

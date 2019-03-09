@@ -1,0 +1,38 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "virtual_network_enabled": true,
+    "virtual_network_name": "dcos",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "security": {
+      "kerberos_tls": {
+        "enable": true
+      },
+      "kerberos": {
+        "enabled": true,
+        "debug": true,
+        "kdc": {
+          "hostname": "kdc.marathon.containerip.dcos.thisdcos.directory",
+          "port": 88
+        },
+        "realm": "MESOS.LAB",
+        "primary": "nifi",
+        "keytab_secret": "keytab",
+        "service_principal": "nifiprincipal@MESOS.LAB",
+        "user_principal": "nifiadmin@MESOS.LAB",
+        "user_principal_keytab": "nifiadminpassword",
+        "cn_dn_node_identity": "${NIFIHOSTNAME}"
+      },
+      "kerberos_tls": {
+        "enable": true
+      }
+    }
+  },
+  "secrets": {
+    "enable": true
+  },
+  "web": {
+    "proxy_host": "${URL}.mesos.lab:8443,nifi-0-node.${NIFIHOSTNAME}:1025,nifi-0-node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:8080,"
+  }
+}

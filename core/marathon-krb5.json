@@ -1,0 +1,31 @@
+{
+  "id": "/krb5",
+  "user": "root",
+  "instances": 1,
+  "container": {
+    "type": "MESOS",
+    "volumes": [
+      {
+        "containerPath": "/usr/share/nginx/html/krb5.conf",
+        "secret": "krb5"
+      }
+    ],
+    "docker": {
+      "image": "nginx"
+    }
+  },
+  "cpus": 1,
+  "mem": 128,
+  "requirePorts": false,
+  "networks": [
+    {
+      "name": "dcos",
+      "mode": "container"
+    }
+  ],
+  "secrets": {
+    "krb5": {
+      "source": "krb5"
+    }
+  }
+}

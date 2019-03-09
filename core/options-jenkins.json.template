@@ -1,0 +1,10 @@
+{
+  "security": {
+    "secret-name": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "strict-mode": true
+  },
+  "service": {
+    "name": "${SERVICEPATH}",
+    "user": "nobody"
+  }
+}

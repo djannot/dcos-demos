@@ -1,0 +1,37 @@
+{
+  "id": "/kdc",
+  "user": "root",
+  "instances": 1,
+  "container": {
+    "type": "MESOS",
+    "volumes": [
+      {
+        "containerPath": "/dev/random",
+        "hostPath": "/dev/urandom",
+        "mode": "RW"
+      }
+    ],
+    "docker": {
+      "image": "sequenceiq/kerberos"
+    }
+  },
+  "cpus": 1,
+  "mem": 128,
+  "requirePorts": false,
+  "networks": [
+    {
+      "name": "dcos",
+      "mode": "container"
+    }
+  ],
+  "healthChecks": [],
+  "fetch": [],
+  "constraints": [],
+  "env": {
+    "BOOTSTRAP": "0",
+    "REALM": "MESOS.LAB",
+    "DOMAIN_REALM": "mesos.lab",
+    "KERB_ADMIN_USER": "admin",
+    "KERB_ADMIN_PASS": "password"
+  }
+}
