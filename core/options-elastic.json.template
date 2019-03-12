@@ -1,0 +1,12 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "virtual_network_enabled": true,
+    "virtual_network_name": "dcos"
+  },
+  "elasticsearch": {
+    "xpack_security_enabled": false
+  }
+}

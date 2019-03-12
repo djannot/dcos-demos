@@ -1,0 +1,15 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}"
+  },
+  "kibana": {
+    "xpack_enabled": false,
+    "elasticsearch_xpack_security_enabled": false,
+    "elasticsearch_url": "http://coordinator.APPNAMEproddataserviceselastic.l4lb.thisdcos.directory:9200",
+    "elasticsearch_tls": false,
+    "user": "kibana",
+    "password": "changeme",
+    "cpus": 0.5,
+    "mem": 2048
+  }
+}
