@@ -4,24 +4,7 @@
     "virtual_network_enabled": true,
     "virtual_network_name": "dcos",
     "service_account": "${SERVICEACCOUNT}",
-    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
-    "security": {
-      "kerberos": {
-        "enabled": true,
-        "debug": true,
-        "kdc": {
-          "hostname": "kdc.marathon.containerip.dcos.thisdcos.directory",
-          "port": 88
-        },
-        "realm": "MESOS.LAB",
-        "primary": "hdfs",
-        "keytab_secret": "keytab"
-      },
-      "transport_encryption": {
-        "enabled": true,
-        "allow_plaintext": false
-      }
-    }
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
   },
   "hdfs": {
     "security_auth_to_local": "UlVMRTpbMTokMUAkMF0oLipATUVTT1MuTEFCKXMvQC4qLy8vTApSVUxFOlsyOiQxQCQwXSguKilzLy4qL25vYm9keS8KUlVMRTpbMTokMUAkMF0oLiopcy8uKi9ub2JvZHkvCg=="

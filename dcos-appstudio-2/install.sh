@@ -1,4 +1,4 @@
-export APPNAME=bigdataparis
+export APPNAME=smartcity
 export PUBLICIP=23.23.21.44
 #export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PUBLICNODES=2
@@ -6,8 +6,7 @@ export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
 export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
-export NIFIHOSTNAME=${APPNAME}proddataservicesnifi
-export SECURE=true
+export SECURE=false
 
 dcos package install --yes --cli dcos-enterprise-cli
 ../core/download-dcos-ca-cert.sh
@@ -18,22 +17,21 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
 ../core/deploy-gitlab.sh ${APPNAME}/dev/gitlab
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
-../core/deploy-kdc.sh
 ../core/deploy-hdfs.sh ${APPNAME}/prod/dataservices/hdfs
+../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
+../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
+
+../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
+../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
+
 ../core/check-status-with-name.sh hdfs ${APPNAME}/prod/dataservices/hdfs
 
-../core/deploy-krb5.sh
 ../core/deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
 
-../core/pre-deploy-nifi.sh ${APPNAME}/prod/dataservices/nifi
-../core/deploy-nifi.sh ${APPNAME}/prod/dataservices/nifi
-../core/check-app-status.sh jupyterlab
+../core/check-app-status.sh ${APPNAME/prod/datascience/jupyterlab
 
 ../core/post-deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
-./post-deploy-jupyterlab-flickr.sh
-../core/check-status-with-name.sh nifi ${APPNAME}/prod/dataservices/nifi
 
-../core/change-nifi-password.sh
 ../core/check-app-status.sh gitlab
 
 ../core/check-app-status.sh jenkins

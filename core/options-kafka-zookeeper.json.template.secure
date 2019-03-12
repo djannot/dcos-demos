@@ -1,0 +1,22 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "virtual_network_enabled": true,
+    "virtual_network_name": "dcos",
+    "security": {
+      "kerberos": {
+        "debug": true,
+        "enabled": true,
+        "kdc": {
+          "hostname": "kdc.marathon.containerip.dcos.thisdcos.directory",
+          "port": 88
+        },
+        "primary": "zookeeper",
+        "realm": "MESOS.LAB",
+        "keytab_secret": "keytab"
+      }
+    }
+  }
+}

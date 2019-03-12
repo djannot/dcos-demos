@@ -1,0 +1,17 @@
+{
+  "kafka": {
+    "kafka_zookeeper_uri": "zookeeper-0-server.${KAFKAZOOKEEPERHOSTNAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-1-server.${KAFKAZOOKEEPERHOSTNAME}.autoip.dcos.thisdcos.directory:1140,zookeeper-2-server.${KAFKAZOOKEEPERHOSTNAME}.autoip.dcos.thisdcos.directory:1140",
+    "num_network_threads": 32
+  },
+  "service": {
+    "name": "${SERVICEPATH}",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "virtual_network_enabled": true,
+    "virtual_network_name": "dcos"
+  },
+  "node": {
+    "data_disk": 10240,
+    "log_disk": 10240
+  }
+}

@@ -1,0 +1,174 @@
+{
+   "apiVersion":"V2",
+   "name":"all",
+   "namespace":"${SERVICEPATH}/pools",
+   "count":${PUBLICNODES},
+   "autoCertificate":true,
+   "haproxy":{
+      "stats":{
+         "bindPort":9090
+      },
+      "frontends":[
+         {
+            "bindPort":8443,
+            "protocol":"HTTPS",
+            "certificates":[
+               "\$AUTOCERT"
+            ],
+            "linkBackend":{
+               "map":[
+                  {
+                     "hostEq":"${APPNAME}.prod.k8s.cluster1.mesos.lab",
+                     "backend":"${APPNAME}-prod-k8s-cluster1-backend"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.prod.dataservices.elastic.mesos.lab",
+                     "backend":"${APPNAME}-prod-dataservices-elastic"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.prod.dataservices.kibana.mesos.lab",
+                     "backend":"${APPNAME}-prod-dataservices-kibana"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.prod.datascience.jupyterlab.mesos.lab",
+                     "backend":"${APPNAME}-prod-datascience-jupyterlab"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.prod.microservices.uipod.mesos.lab",
+                     "backend":"${APPNAME}-prod-microservices-uipod"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.dev.gitlab.mesos.lab",
+                     "backend":"${APPNAME}-dev-gitlab"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.dev.jenkins.mesos.lab",
+                     "backend":"${APPNAME}-dev-jenkins"
+                  }
+               ]
+            }
+         },
+         {
+            "bindPort":10500,
+            "protocol":"TCP",
+            "linkBackend":{
+               "defaultBackend":"socket"
+            }
+         }
+      ],
+      "backends":[
+        {
+           "name":"${APPNAME}-prod-microservices-uipod",
+           "protocol":"HTTP",
+           "services":[
+              {
+                 "marathon":{
+                    "serviceID":"/${APPNAME}/prod/microservices/uipod"
+                 },
+                 "endpoint":{
+                    "portName":"web1"
+                 }
+              }
+           ]
+        },
+        {
+           "name":"socket",
+           "protocol":"TCP",
+           "services":[
+              {
+                 "marathon":{
+                    "serviceID":"/${APPNAME}/prod/microservices/uipod"
+                 },
+                 "endpoint":{
+                    "portName":"websocket"
+                 }
+              }
+           ]
+        },
+        {
+           "name":"${APPNAME}-prod-dataservices-elastic",
+           "protocol":"HTTPS",
+           "services":[
+             {
+                "endpoint": {
+                   "type": "ADDRESS",
+                   "address": "coordinator.${APPNAME}proddataserviceselastic.l4lb.thisdcos.directory",
+                   "port": 9200
+                }
+             }
+           ]
+        },
+        {
+           "name":"${APPNAME}-prod-dataservices-kibana",
+           "protocol":"HTTP",
+           "miscStrs":[
+              "reqrep ^(.*?)service.${APPNAME}.prod.dataservices.kibana.(.*)     \\\\1\\\\2"
+           ],
+           "services":[
+             {
+                "endpoint": {
+                   "type": "ADDRESS",
+                   "address": "web.${APPNAME}proddataserviceskibana.marathon.l4lb.thisdcos.directory",
+                   "port": 80
+                }
+             }
+           ]
+        },
+         {
+            "name": "${APPNAME}-prod-datascience-jupyterlab",
+            "protocol": "HTTP",
+            "services": [
+               {
+                  "endpoint": {
+                     "type": "ADDRESS",
+                     "address": "${APPNAME}proddatasciencejupyterlab.marathon.l4lb.thisdcos.directory",
+                     "port": 8888
+                  }
+               }
+            ]
+         },
+         {
+            "name":"${APPNAME}-prod-k8s-cluster1-backend",
+            "protocol":"HTTPS",
+            "services":[
+               {
+                  "mesos":{
+                     "frameworkName":"${APPNAME}/prod/k8s/cluster1",
+                     "taskNamePattern":"kube-control-plane"
+                  },
+                  "endpoint":{
+                     "portName":"apiserver"
+                  }
+               }
+            ]
+         },
+         {
+            "name":"${APPNAME}-dev-gitlab",
+            "protocol":"HTTP",
+            "services":[
+               {
+                  "endpoint":{
+                     "type":"ADDRESS",
+                     "address":"${APPNAME}devgitlab.marathon.l4lb.thisdcos.directory",
+                     "port":80
+                  }
+               }
+            ]
+         },
+         {
+            "name": "${APPNAME}-dev-jenkins",
+            "protocol": "HTTP",
+            "services": [
+               {
+                  "marathon": {
+                     "serviceID": "/${APPNAME}/dev/jenkins"
+                  },
+                  "endpoint": {
+                     "portName": "nginx"
+                  }
+               }
+            ]
+         }
+      ]
+   }
+}
