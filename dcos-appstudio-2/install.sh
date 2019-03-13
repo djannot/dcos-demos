@@ -17,6 +17,7 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-elastic.sh ${APPNAME}/prod/dataservices/elastic
 ../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
 ../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
+../core/deploy-cassandra.sh ${APPNAME}/prod/dataservices/cassandra
 ../core/deploy-gitlab.sh ${APPNAME}/dev/gitlab
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
 ../core/deploy-hdfs.sh ${APPNAME}/prod/dataservices/hdfs
@@ -28,8 +29,6 @@ dcos package install --yes --cli dcos-enterprise-cli
 
 ../core/deploy-kibana.sh ${APPNAME}/prod/dataservices/kibana
 
-../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
-
 ../core/check-status-with-name.sh hdfs ${APPNAME}/prod/dataservices/hdfs
 
 ../core/deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
@@ -37,6 +36,10 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/check-app-status.sh ${APPNAME}/prod/datascience/jupyterlab
 
 ../core/post-deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
+
+../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
+
+../core/check-status-with-name.sh cassandra ${APPNAME}/prod/dataservices/cassandra
 
 ../core/check-app-status.sh gitlab
 
