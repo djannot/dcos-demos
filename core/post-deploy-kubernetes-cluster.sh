@@ -16,3 +16,6 @@ mv ~/.kube/config ./config.${SERVICEACCOUNT}
 if [ -f ~/.kube/config.ori ]; then
   mv ~/.kube/config.ori ~/.kube/config
 fi
+
+kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-prereqs.yaml
+kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-deployment.yaml

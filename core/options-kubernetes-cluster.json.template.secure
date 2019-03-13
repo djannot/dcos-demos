@@ -1,0 +1,16 @@
+{
+  "calico": {
+    "calico_ipv4pool_cidr": "192.168.0.0/17"
+  },
+  "service": {
+    "name": "${SERVICEPATH}",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
+  },
+  "kubernetes": {
+    "authorization_mode": "RBAC",
+    "high_availability": true,
+    "private_node_count": 3,
+    "service_cidr": "10.100.0.0/17"
+  }
+}

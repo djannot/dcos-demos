@@ -24,6 +24,3 @@ kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create rolebinding jenkins
   --namespace=default
 
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} describe secrets/jenkins-secret
-
-kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-prereqs.yaml
-kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-deployment.yaml

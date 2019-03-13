@@ -1,5 +1,5 @@
 export APPNAME=bigdataparis
-export PUBLICIP=23.23.21.44
+export PUBLICIP=34.239.79.1
 #export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
