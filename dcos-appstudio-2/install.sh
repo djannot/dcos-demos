@@ -1,5 +1,5 @@
 export APPNAME=smartcity
-export PUBLICIP=23.23.21.44
+export PUBLICIP=34.239.79.1
 #export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -62,12 +62,3 @@ dcos edgelb create pool-edgelb-all.json
 ./update-etc-hosts.sh
 
 ../core/post-deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
-./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
-
-until nc -z -v -w 1 ${APPNAME}.prod.dataservices.nifi.mesos.lab 8443
-do
-  sleep 1
-done
-
-../core/update-nifi-permissions.sh ${APPNAME}/prod/dataservices/nifi
-../core/rendertemplate.sh `pwd`/flickr.xml.template > `pwd`/flickr.xml
