@@ -5,7 +5,7 @@
   "kibana": {
     "xpack_enabled": true,
     "elasticsearch_xpack_security_enabled": true,
-    "elasticsearch_url": "https://coordinator.APPNAMEproddataserviceselastic.l4lb.thisdcos.directory:9200",
+    "elasticsearch_url": "https://coordinator.${ELASTICHOSTNAME}.l4lb.thisdcos.directory:9200",
     "elasticsearch_tls": true,
     "user": "kibana",
     "password": "changeme",

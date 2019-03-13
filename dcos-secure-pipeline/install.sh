@@ -34,9 +34,9 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/check-status-with-name.sh nifi ${APPNAME}/prod/dataservices/nifi
 
 ../core/change-nifi-password.sh
-../core/check-app-status.sh gitlab
+../core/check-app-status.sh ${APPNAME}/dev/gitlab
 
-../core/check-app-status.sh jenkins
+../core/check-app-status.sh ${APPNAME}/dev/jenkins
 
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
 

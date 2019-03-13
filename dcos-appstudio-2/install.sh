@@ -6,6 +6,7 @@ export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
 export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
+export ELASTICHOSTNAME=${APPNAME}proddataserviceselastic
 export SECURE=false
 
 dcos package install --yes --cli dcos-enterprise-cli
@@ -41,9 +42,9 @@ dcos package install --yes --cli dcos-enterprise-cli
 
 ../core/check-status-with-name.sh cassandra ${APPNAME}/prod/dataservices/cassandra
 
-../core/check-app-status.sh gitlab
+../core/check-app-status.sh ${APPNAME}/dev/gitlab
 
-../core/check-app-status.sh jenkins
+../core/check-app-status.sh ${APPNAME}/dev/jenkins
 
 ../core/check-app-status.sh ${APPNAME}/prod/dataservices/kibana
 
