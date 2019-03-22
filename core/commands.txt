@@ -1,5 +1,0 @@
-
-read_kt 
-list
-write_kt merged.keytab
-quit

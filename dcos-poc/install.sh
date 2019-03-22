@@ -1,5 +1,5 @@
 export APPNAME=poc
-export PUBLICIP=34.239.79.1
+export PUBLICIP=54.85.153.48
 #export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -105,3 +105,5 @@ open https://poc.prod.dataservices.kibana.mesos.lab:8443
 ../core/check-app-status.sh ${APPNAME}/prod/datascience/jupyterlab
 
 ../core/post-deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
+
+open https://poc.prod.datascience.jupyterlab.mesos.lab:8443
