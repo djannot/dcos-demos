@@ -11,6 +11,7 @@ import json
 import urllib
 
 UPLOAD_FOLDER = '/static'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -30,7 +31,75 @@ c = Consumer({
 
 c.subscribe(['photos'])
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            model_file = "/output_graph.pb"
+            label_file = "/output_labels.txt"
+            input_height = 299
+            input_width = 299
+            input_mean = 0
+            input_std = 255
+            input_layer = "Placeholder"
+            output_layer = "final_result"
+
+            graph = load_graph(model_file)
+            t = read_tensor_from_image_file(
+                os.path.join(app.config['UPLOAD_FOLDER'], filename),
+                input_height=input_height,
+                input_width=input_width,
+                input_mean=input_mean,
+                input_std=input_std)
+
+            input_name = "import/" + input_layer
+            output_name = "import/" + output_layer
+            input_operation = graph.get_operation_by_name(input_name)
+            output_operation = graph.get_operation_by_name(output_name)
+
+            with tf.Session(graph=graph) as sess:
+              results = sess.run(output_operation.outputs[0], {
+                  input_operation.outputs[0]: t
+              })
+            results = np.squeeze(results)
+
+            top_k = results.argsort()[-5:][::-1]
+            labels = load_labels(label_file)
+            result = ""
+            for i in top_k:
+              result += labels[i] + " " + str(results[i]) + "<br/>"
+            #return result
+            return render_template("response.html", labels=labels, results=results, filename=filename)
+
 @app.route('/', methods=['GET'])
+def main_page():
+    return '''
+    <!doctype html>
+    <title>Classify pictures</title>
+    <h1>Upload new picture</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+    '''
+
+@app.route('/kafka', methods=['GET'])
 def main_page():
     return render_template("main.html")
 

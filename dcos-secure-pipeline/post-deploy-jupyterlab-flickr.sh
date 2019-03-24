@@ -8,3 +8,4 @@ dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/serve-model.
 dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/serve-model.yaml' < ./serve-model/serve-model.yaml
 dcos task exec -i $task sh -c 'mkdir /mnt/mesos/sandbox/serve-model/templates'
 dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/templates/main.html' < ./serve-model/templates/main.html
+dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/templates/response.html' < ./serve-model/templates/response.html
