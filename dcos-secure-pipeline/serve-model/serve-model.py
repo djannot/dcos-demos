@@ -2,84 +2,89 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import os
-from flask import Flask, flash, request, redirect, url_for, render_template
+from flask import Flask, flash, request, redirect, url_for, render_template, jsonify
 from werkzeug.utils import secure_filename
 import numpy as np
 import tensorflow as tf
+from confluent_kafka import Consumer, KafkaError
+import json
+import urllib
 
 UPLOAD_FOLDER = '/static'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+c = Consumer({
+    'bootstrap.servers': 'kafka-0-broker.project1proddataserviceskafka.autoip.dcos.thisdcos.directory:1025',
+    'group.id': 'mygroup',
+    'auto.offset.reset': 'latest',
+'sasl.kerberos.principal': 'client@MESOS.LAB',
+'sasl.kerberos.keytab': '/merged-keytab/merged.keytab',
+'sasl.kerberos.service.name': 'kafka',
+'security.protocol': 'SASL_SSL',
+'sasl.mechanisms': 'GSSAPI',
+'debug': 'security',
+'ssl.ca.location': '/dcos-ca/dcos-ca.crt'
+})
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            model_file = "/output_graph.pb"
-            label_file = "/output_labels.txt"
-            input_height = 299
-            input_width = 299
-            input_mean = 0
-            input_std = 255
-            input_layer = "Placeholder"
-            output_layer = "final_result"
-
-            graph = load_graph(model_file)
-            t = read_tensor_from_image_file(
-                os.path.join(app.config['UPLOAD_FOLDER'], filename),
-                input_height=input_height,
-                input_width=input_width,
-                input_mean=input_mean,
-                input_std=input_std)
-
-            input_name = "import/" + input_layer
-            output_name = "import/" + output_layer
-            input_operation = graph.get_operation_by_name(input_name)
-            output_operation = graph.get_operation_by_name(output_name)
-
-            with tf.Session(graph=graph) as sess:
-              results = sess.run(output_operation.outputs[0], {
-                  input_operation.outputs[0]: t
-              })
-            results = np.squeeze(results)
-
-            top_k = results.argsort()[-5:][::-1]
-            labels = load_labels(label_file)
-            result = ""
-            for i in top_k:
-              result += labels[i] + " " + str(results[i]) + "<br/>"
-            #return result
-            return render_template("response.html", labels=labels, results=results, filename=filename)
+c.subscribe(['photos'])
 
 @app.route('/', methods=['GET'])
 def main_page():
-    return '''
-    <!doctype html>
-    <title>Classify pictures</title>
-    <h1>Upload new picture</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" value="Upload">
-    </form>
-    '''
+    return render_template("main.html")
+
+@app.route('/photos', methods=['GET'])
+def classify_photos():
+    messages = []
+    for x in range(0, 5):
+        msg = c.poll(1.0)
+
+        if msg is None:
+            continue
+        if msg.error():
+            print("Consumer error: {}".format(msg.error()))
+            continue
+
+        message = json.loads(msg.value())
+        filename = os.path.basename(message['url_l'])
+        urllib.urlretrieve(message['url_l'], os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        model_file = "/output_graph.pb"
+        label_file = "/output_labels.txt"
+        input_height = 299
+        input_width = 299
+        input_mean = 0
+        input_std = 255
+        input_layer = "Placeholder"
+        output_layer = "final_result"
+
+        graph = load_graph(model_file)
+        t = read_tensor_from_image_file(
+            os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            input_height=input_height,
+            input_width=input_width,
+            input_mean=input_mean,
+            input_std=input_std)
+
+        input_name = "import/" + input_layer
+        output_name = "import/" + output_layer
+        input_operation = graph.get_operation_by_name(input_name)
+        output_operation = graph.get_operation_by_name(output_name)
+
+        with tf.Session(graph=graph) as sess:
+          results = sess.run(output_operation.outputs[0], {
+              input_operation.outputs[0]: t
+          })
+        results = np.squeeze(results)
+
+        top_k = results.argsort()[-5:][::-1]
+        labels = load_labels(label_file)
+        message['results'] = results.tolist()
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        messages.append(message)
+    return jsonify(messages)
 
 def load_graph(model_file):
   graph = tf.Graph()

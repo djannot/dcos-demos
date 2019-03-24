@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Classify photos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+      var fetchPhotos = function() {
+        $.ajax({
+          url: "/photos",
+          success: function(result) {
+            console.log(result);
+            result.forEach(entry => {
+              if(entry['results'][0] > entry['results'][1]) {
+                $("#col1").append('<img src="' + entry['url_s'] + '" class="img-fluid img-thumbnail">');
+              } else {
+                $("#col2").append('<img src="' + entry['url_s'] + '" class="img-fluid img-thumbnail pull-right">');
+              }
+            });
+          },
+          complete: function(result) {
+            fetchPhotos();
+          }
+        });
+      }
+
+      fetchPhotos();
+    </script>
+  </head>
+  <body>
+    <div>
+      <div class="row no-gutters">
+        <div class="col" id="col1">
+          <h1 align="center">Cats</h1>
+        </div>
+        <div class="col" id="col2">
+          <h1 align="center">Dogs</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

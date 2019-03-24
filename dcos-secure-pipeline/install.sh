@@ -1,7 +1,7 @@
 export APPNAME=project1
-export PUBLICIP=52.207.130.216
-#export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
-export PUBLICNODES=2
+export PUBLICIP=52.20.225.60
+export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
+#export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
@@ -31,6 +31,12 @@ dcos package install --yes --cli dcos-enterprise-cli
 
 ../core/post-deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
 ./post-deploy-jupyterlab-flickr.sh
+../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
+../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
+
+../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
+../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
+
 ../core/check-status-with-name.sh nifi ${APPNAME}/prod/dataservices/nifi
 
 ../core/change-nifi-password.sh
@@ -52,13 +58,13 @@ dcos edgelb create pool-edgelb-all.json
 
 ./update-etc-hosts.sh
 
-../core/post-deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
-./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
-
 until nc -z -v -w 1 ${APPNAME}.prod.dataservices.nifi.mesos.lab 8443
 do
   sleep 1
 done
+
+../core/post-deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
+./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
 
 ../core/update-nifi-permissions.sh ${APPNAME}/prod/dataservices/nifi
 ../core/rendertemplate.sh `pwd`/flickr.xml.template > `pwd`/flickr.xml

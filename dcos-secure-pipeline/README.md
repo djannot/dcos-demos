@@ -51,9 +51,9 @@ As you can see, there are few warnings. They are corresponding to the sensitive 
 
 ![nifi-template-flickr](images/nifi-template-flickr.png)
 
-Double click on the `Get Recent Flickr Pictures` group.
+Double click on the `Get Cat Pictures from Flickr` group.
 
-![nifi-get-recent-flickr-pictures](images/nifi-get-recent-flickr-pictures.png)
+![nifi-get-recent-flickr-pictures](images/nifi-get-cat-pictures-from-flickr.png)
 
 Double click on the first `InvokeHTTP` processor.
 
@@ -73,17 +73,17 @@ Indicate `changeit` for the truststore password.
 
 Click on the `Enable` icon and enable it.
 
-Double click on the first `GenerateFlowFile` processor.
+Double click on the `PublishKafka_1_0` processor.
 
-![nifi-cat](images/nifi-cat.png)
-
-Specify `cats` for the value of the `tags` parameter.
+Configure and enable the `SSL Context Service` the same way you did on the previous step.
 
 Go back to the main screen by clicking on `NiFi Flow` on the bottom left.
 
-Select all the components and copy and paste to duplicate the workflow.
+Double click on the `Get Dog Pictures from Flickr` group.
 
-Update the `tags` parameter of the `GenerateFlowFile` processor of the second workflow with the value `dog`.
+Double click on the `PublishKafka_1_0` processor.
+
+Configure and enable the `SSL Context Service` the same way you did on the previous step.
 
 Go back to the main screen by clicking on `NiFi Flow` on the bottom left.
 
@@ -92,7 +92,7 @@ Select all the components and click on the play button.
 Run the following command to launch the Jupyter notebook in your web browser:
 
 ```
-./open-jupyterlab-1.12.sh
+./open-jupyterlab.sh
 ```
 
 The password is `jupyter`
@@ -130,13 +130,13 @@ Go back to the terminal in the Jupyter lab notebook and run the following comman
 git config --global user.name "Administrator"
 git config --global user.email "admin@example.com"
 git init
-git remote add origin http://x.x.x.x:10080/root/server-model.git
+git remote add origin http://${APPNAME}devgitlab.marathon.l4lb.thisdcos.directory/root/serve-model.git
 git add .
 git commit -a -m "First commit"
 git push -u origin master
 ```
 
-You need to replace `x.x.x.x` by the IP of your setup you can find in the URL of gitlab.
+You need to replace `${APPNAME}` by the value you set in the `install.sh` script.
 
 Run the following command to launch jenkins in your web browser:
 
@@ -144,9 +144,13 @@ Run the following command to launch jenkins in your web browser:
 ./open-jenkins.sh
 ```
 
-Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` -> `jenkins/******` and click on `Delete`.
+Go to `Manage Jenkins` and click on the `Correct` button on the top right corner.
 
-Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
+Check `Pipeline: Step API` and click on `Download now and install after restart`
+
+Check the option to restart automatically Jenkins.
+
+When Jenkins has restarted, go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
 
 Specify `root` and `password` as the username and password and set the `ID` to `gitlab`.
 
@@ -157,12 +161,6 @@ Specify your Docker Hub username and password and set the `ID` to `dockerhub`.
 Go back to the main page and click on `Manage Jenkins` and then on `Configure System`.
 
 Check the `Environment variables` box and add a new one called `DOCKERHUB_REPO` with the name of the Docker repository you want to use (something like `yourdockerhubusername/serve-model`).
-
-At the bottom, in the `cloud` section, click on `Add` right to the `Framework credentials option`.
-
-Specify `jenkins` and `password` as the username and password leave the rest blank.
-
-Finally, select the `credentials` you've just created.
 
 Click on `Apply` and then on `Save`.
 
