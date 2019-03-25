@@ -108,14 +108,6 @@ hdfs dfs -ls -R /user/nobody/flickr | wc -l
 2000
 ```
 
-Go to `~/serve-model` and edit the Jenkins file to update the value of the token which the one that has been returned by the deployment script:
-
-```
-Data
-====
-token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImplbmtpbnMtc2VjcmV0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImplbmtpbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyZjAwNGRiMS1jMTkzLTExZTgtYjBjMS0wNjE0ZmVlYTljMjAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpqZW5raW5zIn0.SBk2PXirHMgzQufznAp7hq7KZ53wXrzmnqJ1IzUKosYggGuTaCLIquPwZt765fzfoCIjyVtR0EJB-drlQQeU8CC1MiuYtUoFHNWW3ArOIw54uk50mtaoFHkY2N1Cte_rSFp45Tq6MqC5O41TmjlekkQ3AhFjTGArfZHtd5vayzk1fKYVLd69DF26NuXqrgPH0agnXQ02TL6jhGdHj1Ptnm50CbkGyfIWLG4zfzKTa_mPirjBXfxKn7yJKrr4-Hr3hGNGN4JrNlxJxETqHqZA6K_UddsPiRf12Ws5kpZV6tHi-h9D5jh952fU6rRQfx43oFoeuZuyQyZsJBcu91Wn5g
-```
-
 Run the following command to launch gitlab in your web browser:
 
 ```
@@ -157,6 +149,16 @@ Specify `root` and `password` as the username and password and set the `ID` to `
 Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
 
 Specify your Docker Hub username and password and set the `ID` to `dockerhub`.
+
+Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
+
+Set the `ID` to `kubernetes`, the `Username` to `jenkins` and the `Password` to the value of the token that has been returned by the deployment script:
+
+```
+Data
+====
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImplbmtpbnMtc2VjcmV0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImplbmtpbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyZjAwNGRiMS1jMTkzLTExZTgtYjBjMS0wNjE0ZmVlYTljMjAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpqZW5raW5zIn0.SBk2PXirHMgzQufznAp7hq7KZ53wXrzmnqJ1IzUKosYggGuTaCLIquPwZt765fzfoCIjyVtR0EJB-drlQQeU8CC1MiuYtUoFHNWW3ArOIw54uk50mtaoFHkY2N1Cte_rSFp45Tq6MqC5O41TmjlekkQ3AhFjTGArfZHtd5vayzk1fKYVLd69DF26NuXqrgPH0agnXQ02TL6jhGdHj1Ptnm50CbkGyfIWLG4zfzKTa_mPirjBXfxKn7yJKrr4-Hr3hGNGN4JrNlxJxETqHqZA6K_UddsPiRf12Ws5kpZV6tHi-h9D5jh952fU6rRQfx43oFoeuZuyQyZsJBcu91Wn5g
+```
 
 Go back to the main page and click on `Manage Jenkins` and then on `Configure System`.
 
@@ -236,3 +238,5 @@ You can also run the following command to launch another page of the web applica
 ```
 ./open-web-app-kafka.sh
 ```
+
+![cat](images/kafka.png)
