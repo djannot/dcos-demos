@@ -230,3 +230,9 @@ Run the following command to launch the web application in your web browser:
 Upload a picture of a cat or a dog and check if the model you retrain works well.
 
 ![cat](images/cat.png)
+
+You can also run the following command to launch another page of the web application that is classifying pictures it gets from Kafka:
+
+```
+./open-web-app-kafka.sh
+```

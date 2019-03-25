@@ -100,7 +100,7 @@ def main_page():
     '''
 
 @app.route('/kafka', methods=['GET'])
-def main_page():
+def kafka_page():
     return render_template("main.html")
 
 @app.route('/photos', methods=['GET'])

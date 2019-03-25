@@ -12,5 +12,6 @@ ADD serve-model.py /
 ADD output_labels.txt /
 ADD output_graph.pb /
 ADD templates/main.html /templates/main.html
+ADD templates/response.html /templates/response.html
 RUN mkdir /static
 WORKDIR /
