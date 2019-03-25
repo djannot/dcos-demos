@@ -4,6 +4,7 @@
 task=`dcos task | grep jupyterlab | awk '{ print $5 }'`
 dcos task exec -i $task sh -c 'mkdir /mnt/mesos/sandbox/serve-model'
 dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/Dockerfile' < ./serve-model/Dockerfile
+dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/Jenkinsfile' < ./serve-model/Jenkinsfile
 dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/serve-model.py' < ./serve-model/serve-model.py
 dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/serve-model.yaml' < ./serve-model/serve-model.yaml
 dcos task exec -i $task sh -c 'mkdir /mnt/mesos/sandbox/serve-model/templates'
