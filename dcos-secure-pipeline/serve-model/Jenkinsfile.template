@@ -47,7 +47,7 @@ def gitCommit() {
         sh "if [ ! -f ./kubectl ]; then wget -q https://storage.googleapis.com/kubernetes-release/release/v1.10.7/bin/linux/amd64/kubectl; fi"
         sh "chmod +x ./kubectl"
         sh "./kubectl config set-credentials \${K8S_USERNAME} --token=\${K8S_PASSWORD}"
-        sh "./kubectl config set-cluster dcos-k8s --server=https://apiserver.${K8SHOSTNAME}prodk8scluster1.l4lb.thisdcos.directory:6443 --insecure-skip-tls-verify"
+        sh "./kubectl config set-cluster dcos-k8s --server=https://apiserver.${K8SHOSTNAME}.l4lb.thisdcos.directory:6443 --insecure-skip-tls-verify"
         sh "./kubectl config set-context dcos-k8s --cluster=dcos-k8s --namespace=default --user=jenkins"
         sh "./kubectl config use-context dcos-k8s"
         sh "./kubectl get pods"
