@@ -14,9 +14,10 @@
           success: function(result) {
             console.log(result);
             result.forEach(entry => {
-              if(entry['results'][0] > entry['results'][1]) {
+              if((entry['results'][0] > entry['results'][1]) && (entry['results'][0] > 0.95)) {
                 $("#col1").append('<img src="' + entry['url_s'] + '" class="img-fluid img-thumbnail">');
-              } else {
+              }
+              if((entry['results'][1] > entry['results'][0]) && (entry['results'][1] > 0.95)) {
                 $("#col2").append('<img src="' + entry['url_s'] + '" class="img-fluid img-thumbnail pull-right">');
               }
             });

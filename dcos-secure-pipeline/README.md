@@ -142,27 +142,17 @@ Check `Pipeline: Step API` and click on `Download now and install after restart`
 
 Check the option to restart automatically Jenkins.
 
-When Jenkins has restarted, go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
+When Jenkins has restarted, click on `Manage Jenkins` and then on `Configure System`.
 
-Specify `root` and `password` as the username and password and set the `ID` to `gitlab`.
+At the bottom, in the `Mesos cloud` section, click on `Advanced` and again on the other `Advanced` button.
 
-Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
+Click on `Add Parameter` and set the `Name` to `env` and the `Value` to `DOCKER_EXTRA_OPTS=--insecure-registry ${APPNAME}devregistry.marathon.l4lb.thisdcos.directory:5000`
 
-Specify your Docker Hub username and password and set the `ID` to `dockerhub`.
+You need to replace ${APPNAME} by the value you set in the install.sh script.
 
-Go to `Credentials` -> `System` -> `Global credentials (unrestricted)` and click on `Add Credentials`.
+![jenkins-registry](images/jenkins-registry.png)
 
-Set the `ID` to `kubernetes`, the `Username` to `jenkins` and the `Password` to the value of the token that has been returned by the deployment script:
-
-```
-Data
-====
-token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImplbmtpbnMtc2VjcmV0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6ImplbmtpbnMiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC51aWQiOiIyZjAwNGRiMS1jMTkzLTExZTgtYjBjMS0wNjE0ZmVlYTljMjAiLCJzdWIiOiJzeXN0ZW06c2VydmljZWFjY291bnQ6ZGVmYXVsdDpqZW5raW5zIn0.SBk2PXirHMgzQufznAp7hq7KZ53wXrzmnqJ1IzUKosYggGuTaCLIquPwZt765fzfoCIjyVtR0EJB-drlQQeU8CC1MiuYtUoFHNWW3ArOIw54uk50mtaoFHkY2N1Cte_rSFp45Tq6MqC5O41TmjlekkQ3AhFjTGArfZHtd5vayzk1fKYVLd69DF26NuXqrgPH0agnXQ02TL6jhGdHj1Ptnm50CbkGyfIWLG4zfzKTa_mPirjBXfxKn7yJKrr4-Hr3hGNGN4JrNlxJxETqHqZA6K_UddsPiRf12Ws5kpZV6tHi-h9D5jh952fU6rRQfx43oFoeuZuyQyZsJBcu91Wn5g
-```
-
-Go back to the main page and click on `Manage Jenkins` and then on `Configure System`.
-
-Check the `Environment variables` box and add a new one called `DOCKERHUB_REPO` with the name of the Docker repository you want to use (something like `yourdockerhubusername/serve-model`).
+Note that we are using a Secure Docker Registry, but the certificate of the DC/OS CA isn't included in the image of the Jenkins executor. That's why we add this Docker option.
 
 Click on `Apply` and then on `Save`.
 

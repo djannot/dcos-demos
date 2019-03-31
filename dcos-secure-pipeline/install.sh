@@ -1,5 +1,7 @@
 export APPNAME=project1
-export PUBLICIP=18.214.66.6
+export OSUSER=core
+export MASTERIP=54.80.163.173
+export PUBLICIP=100.26.113.24
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -7,6 +9,7 @@ export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
 export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
 export NIFIHOSTNAME=${APPNAME}proddataservicesnifi
+export REGISTRYHOSTNAME=${APPNAME}devregistry
 export SECURE=true
 
 dcos package install --yes --cli dcos-enterprise-cli
@@ -16,6 +19,7 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/check-kubernetes-mke-status.sh
 
 ../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
+../core/deploy-registry.sh ${APPNAME}/dev/registry
 ../core/deploy-gitlab.sh ${APPNAME}/dev/gitlab
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
 ../core/deploy-kdc.sh
@@ -37,9 +41,13 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
 ../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
 
+dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p 2 photos
+
 ../core/check-status-with-name.sh nifi ${APPNAME}/prod/dataservices/nifi
 
 ../core/change-nifi-password.sh
+../core/check-app-status.sh ${APPNAME}/dev/registry
+
 ../core/check-app-status.sh ${APPNAME}/dev/gitlab
 
 ../core/check-app-status.sh ${APPNAME}/dev/jenkins
@@ -65,6 +73,7 @@ done
 
 ../core/post-deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
 ./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
+./post-deploy-jenkins.sh ${APPNAME}/prod/k8s/cluster1
 
 ../core/update-nifi-permissions.sh ${APPNAME}/prod/dataservices/nifi
 ../core/rendertemplate.sh `pwd`/flickr.xml.template > `pwd`/flickr.xml

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: serve-model
-        image: djannot/serve-model:latest
+        image: ${REGISTRYHOSTNAME}.marathon.l4lb.thisdcos.directory:5000/serve-model:latest
         imagePullPolicy: Always
         command: ["flask"]
         args: ["run", "--host=0.0.0.0"]

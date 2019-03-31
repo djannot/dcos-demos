@@ -18,14 +18,14 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 c = Consumer({
     'bootstrap.servers': 'kafka-0-broker.project1proddataserviceskafka.autoip.dcos.thisdcos.directory:1025',
-    'group.id': 'mygroup',
-    'auto.offset.reset': 'latest',
+    'group.id': 'group1',
+    'auto.offset.reset': 'earliest',
 'sasl.kerberos.principal': 'client@MESOS.LAB',
 'sasl.kerberos.keytab': '/merged-keytab/merged.keytab',
 'sasl.kerberos.service.name': 'kafka',
 'security.protocol': 'SASL_SSL',
 'sasl.mechanisms': 'GSSAPI',
-'debug': 'security',
+'debug': 'consumer',
 'ssl.ca.location': '/dcos-ca/dcos-ca.crt'
 })
 

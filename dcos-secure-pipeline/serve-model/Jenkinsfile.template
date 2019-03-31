@@ -13,25 +13,15 @@ def gitCommit() {
         dir ('.') {
         // Build Docker image
         stage 'Build'
-        sh "docker build -t \${env.DOCKERHUB_REPO} ."
+        sh "docker build -t ${REGISTRYHOSTNAME}.marathon.l4lb.thisdcos.directory:5000/serve-model ."
 
         stage 'Test'
         sh "ls"
 
 
-        // Log in and push image to GitLab
+        // Push image to GitLab
         stage 'Publish'
-        withCredentials(
-            [[
-                \$class: 'UsernamePasswordMultiBinding',
-                credentialsId: 'dockerhub',
-                usernameVariable: 'DOCKERHUB_USERNAME',
-                passwordVariable: 'DOCKERHUB_PASSWORD'
-            ]]
-        ) {
-            sh "docker login -u \${env.DOCKERHUB_USERNAME} -p \${env.DOCKERHUB_PASSWORD}"
-            sh "docker push \${env.DOCKERHUB_REPO}"
-        }
+        sh "docker push ${REGISTRYHOSTNAME}.marathon.l4lb.thisdcos.directory:5000/serve-model"
     }
 
     // Deploy

@@ -1,0 +1,67 @@
+{
+  "backoffFactor": 1.15,
+  "backoffSeconds": 1,
+  "container": {
+    "docker": {
+      "forcePullImage": false,
+      "image": "registry:2.7.1",
+      "parameters": [],
+      "privileged": false
+    },
+    "portMappings": [
+      {
+        "containerPort": 5000,
+        "hostPort": 0,
+        "labels": {
+          "VIP_0": "${SERVICEPATH}:5000"
+        },
+        "name": "registry",
+        "protocol": "tcp",
+        "servicePort": 10003
+      }
+    ],
+    "type": "MESOS"
+  },
+  "cpus": 0.2,
+  "env": {
+    "FOO": "bar",
+    "REGISTRY_HTTP_TLS_CERTIFICATE": "/mnt/mesos/sandbox/signed.certificate",
+    "REGISTRY_HTTP_TLS_KEY": "/mnt/mesos/sandbox/signed.key",
+    "REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY": "/mnt/mesos/sandbox/var/registry"
+  },
+  "executor": "",
+  "fetch": [
+    {
+      "cache": false,
+      "executable": false,
+      "extract": false,
+      "uri": "http://certificatesforregistry.marathon.containerip.dcos.thisdcos.directory:80/signed.certificate"
+    },
+    {
+      "cache": false,
+      "executable": false,
+      "extract": false,
+      "uri": "http://certificatesforregistry.marathon.containerip.dcos.thisdcos.directory:80/signed.key"
+    }
+  ],
+  "healthChecks": [
+    {
+      "delaySeconds": 15,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
+      "ipProtocol": "IPv4",
+      "maxConsecutiveFailures": 3,
+      "portIndex": 0,
+      "protocol": "TCP",
+      "timeoutSeconds": 20
+    }
+  ],
+  "id": "${SERVICEPATH}",
+  "instances": 1,
+  "mem": 256,
+  "networks": [
+    {
+      "mode": "container/bridge"
+    }
+  ]
+}
