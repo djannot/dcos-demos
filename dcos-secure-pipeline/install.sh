@@ -14,6 +14,7 @@ export SECURE=true
 
 dcos package install --yes --cli dcos-enterprise-cli
 ../core/download-dcos-ca-cert.sh
+../core/deploy-dcos-monitoring.sh infra/monitoring/dcos-monitoring
 
 ../core/deploy-kubernetes-mke.sh
 ../core/check-kubernetes-mke-status.sh
@@ -53,6 +54,8 @@ dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p 2 photos
 ../core/check-app-status.sh ${APPNAME}/dev/jenkins
 
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
+
+../core/check-status-with-name.sh beta-dcos-monitoring infra/monitoring/dcos-monitoring
 
 ../core/deploy-edgelb.sh infra/network/dcos-edgelb
 
