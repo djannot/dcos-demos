@@ -1,0 +1,7 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
+  }
+}

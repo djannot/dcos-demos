@@ -7,5 +7,6 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 ./create-service-account.sh
 ./grant-permissions.sh
 
-./rendertemplate.sh options-cassandra.json.template > options-cassandra.json
-dcos package install --yes cassandra --options=options-cassandra.json --package-version=2.5.0-3.11.3
+./rendertemplate.sh options-dcos-monitoring.json.template > options-dcos-monitoring.json
+
+dcos package install beta-dcos-monitoring --yes --options=options-dcos-monitoring.json

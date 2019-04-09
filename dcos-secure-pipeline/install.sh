@@ -1,7 +1,7 @@
 export APPNAME=project1
 export OSUSER=core
-export MASTERIP=54.80.163.173
-export PUBLICIP=100.26.113.24
+export MASTERIP=54.162.242.76
+export PUBLICIP=52.20.213.81
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -32,7 +32,7 @@ dcos package install --yes --cli dcos-enterprise-cli
 
 ../core/pre-deploy-nifi.sh ${APPNAME}/prod/dataservices/nifi
 ../core/deploy-nifi.sh ${APPNAME}/prod/dataservices/nifi
-../core/check-app-status.sh jupyterlab
+../core/check-app-status.sh ${APPNAME}/prod/datascience/jupyterlab
 
 ../core/post-deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
 ./post-deploy-jupyterlab-flickr.sh
