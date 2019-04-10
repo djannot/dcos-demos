@@ -119,6 +119,7 @@ Set the password to `password`, login with the user `root` and this password and
 Go back to the terminal in the Jupyter lab notebook and run the following command to initialize the git repo.
 
 ```
+cd ~/serve-model
 git config --global user.name "Administrator"
 git config --global user.email "admin@example.com"
 git init
