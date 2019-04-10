@@ -145,7 +145,11 @@ Check the option to restart automatically Jenkins.
 
 When Jenkins has restarted, click on `Manage Jenkins` and then on `Configure System`.
 
-At the bottom, in the `Mesos cloud` section, click on `Advanced` and again on the other `Advanced` button.
+At the bottom, in the `Mesos cloud` section, click on `Advanced`.
+
+Update the value of `Idle Termination Minutes` to `1440`.
+
+Click again on the other `Advanced` button.
 
 Click on `Add Parameter` and set the `Name` to `env` and the `Value` to `DOCKER_EXTRA_OPTS=--insecure-registry ${APPNAME}devregistry.marathon.l4lb.thisdcos.directory:5000`
 
