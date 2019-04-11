@@ -39,11 +39,11 @@ Right click on the background.
 
 ![nifi-templates](images/nifi-templates.png)
 
-Select `Upload template` and upload the `Flickr.xml` template.
+Select `Upload template` and upload the `Flickr.xml` file.
 
 ![nifi-upload-template-flickr](images/nifi-upload-template-flickr.png)
 
-Drag and drop the template icon and select the `Flickr.xml` template.
+Drag and drop the template icon and select the `Flickr` template.
 
 ![nifi-add-template-flickr](images/nifi-add-template-flickr.png)
 
@@ -87,7 +87,9 @@ Configure and enable the `SSL Context Service` the same way you did on the previ
 
 Go back to the main screen by clicking on `NiFi Flow` on the bottom left.
 
-Select all the components and click on the play button.
+Select all the components (ex: `Cmd + A` or `Ctrl + A`) and click on the play button.
+
+There will be few errors due to pictures that aren't available on Flickr. You can ignore them.
 
 Run the following command to launch the Jupyter notebook in your web browser:
 
@@ -101,7 +103,7 @@ The password is `jupyter`
 
 Click on the `Terminal` icon to launch a terminal inside the Notebook.
 
-Run the following command until you get around 2000 results (which means 2000 pictures) and stop the NiFi workflow.
+Run the following command until the value doesn't change anymore (which means that NiFi has downloaded all the pictures). You should get around 1700 pictures.
 
 ```
 hdfs dfs -ls -R /user/nobody/flickr | wc -l
@@ -118,6 +120,8 @@ Set the password to `password`, login with the user `root` and this password and
 
 Go back to the terminal in the Jupyter lab notebook and run the following command to initialize the git repo.
 
+You need to replace `${APPNAME}` by the value you set in the `install.sh` script.
+
 ```
 cd ~/serve-model
 git config --global user.name "Administrator"
@@ -129,7 +133,7 @@ git commit -a -m "First commit"
 git push -u origin master
 ```
 
-You need to replace `${APPNAME}` by the value you set in the `install.sh` script.
+It will ask for the username and password of Gitlab (`root` / `password`)
 
 Run the following command to launch jenkins in your web browser:
 
@@ -207,6 +211,16 @@ git push
 This will trigger the jenkins pipeline.
 
 ![jenkins-build](images/jenkins-build.png)
+
+The `install.sh` script has configured your `~/.kube/config` file.
+
+You need to run the following command to start the proxy used to access the Kubernetes Dashboard.
+
+```
+kubectl proxy
+```
+
+Set the `APPNAME` variable with the same value you've specified at the beginning of the `install.sh` script.
 
 Run the following command to launch the Kubernetes Dashboard in your web browser:
 
