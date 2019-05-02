@@ -1,0 +1,18 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "principal": "${SERVICEACCOUNT}",
+    "secret_name": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "user": "root"
+  },
+  "node": {
+    "count": ${PRIVATENODES}
+  },
+  "etcd": {
+    "enabled": true
+  },
+  "lighthouse": {
+    "enabled": true,
+    "public_agent": false
+  }
+}

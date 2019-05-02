@@ -8,4 +8,4 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 ./grant-permissions.sh
 
 ./rendertemplate.sh options-kafka.json.template > options-kafka.json
-dcos package install --yes kafka --options=options-kafka.json --package-version=2.3.0-1.1.0
+dcos package install --yes kafka --options=options-kafka.json --package-version=2.5.0-2.1.0

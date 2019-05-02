@@ -44,8 +44,34 @@
                   {
                      "hostReg":"${APPNAME}.dev.jenkins.mesos.lab",
                      "backend":"${APPNAME}-dev-jenkins"
+                  },
+
+                  {
+                     "hostReg":"infra.storage.portworx.mesos.lab",
+                     "backend":"infra-storage-portworx"
                   }
                ]
+            }
+         },
+         {
+            "bindPort":9042,
+            "protocol":"TCP",
+            "linkBackend":{
+               "defaultBackend":"${APPNAME}-prod-dataservices-cassandra"
+            }
+         },
+         {
+            "bindPort":9092,
+            "protocol":"TCP",
+            "linkBackend":{
+               "defaultBackend":"${APPNAME}-prod-dataservices-kafka"
+            }
+         },
+         {
+            "bindPort":9200,
+            "protocol":"TCP",
+            "linkBackend":{
+               "defaultBackend":"${APPNAME}-prod-dataservices-elastic"
             }
          }
       ],
@@ -159,6 +185,64 @@
                   },
                   "endpoint":{
                      "portName":"nginx"
+                  }
+               }
+            ]
+         },
+         {
+            "name":"infra-storage-portworx",
+            "protocol":"HTTP",
+            "services":[
+               {
+                  "endpoint":{
+                     "type":"ADDRESS",
+                     "address":"lighthouse-0-start.infrastorageportworx.autoip.dcos.thisdcos.directory",
+                     "port":8085
+                  }
+               }
+            ]
+         },
+         {
+            "name":"${APPNAME}-prod-dataservices-cassandra",
+            "protocol":"TCP",
+            "services":[
+               {
+                  "mesos":{
+                     "frameworkName":"${APPNAME}/prod/dataservices/cassandra",
+                     "taskNamePattern":"^node-.*$"
+                  },
+                  "endpoint":{
+                     "portName":"native-client"
+                  }
+               }
+            ]
+         },
+         {
+            "name":"${APPNAME}-prod-dataservices-kafka",
+            "protocol":"TCP",
+            "services":[
+               {
+                  "mesos":{
+                     "frameworkName":"${APPNAME}/prod/dataservices/kafka",
+                     "taskNamePattern":"^broker-.*$"
+                  },
+                  "endpoint":{
+                     "portName":"broker"
+                  }
+               }
+            ]
+         },
+         {
+            "name":"${APPNAME}-prod-dataservices-elastic",
+            "protocol":"TCP",
+            "services":[
+               {
+                  "mesos":{
+                     "frameworkName":"${APPNAME}/prod/dataservices/elastic",
+                     "taskNamePattern":"^data-.*$"
+                  },
+                  "endpoint":{
+                     "portName":"data-http"
                   }
                }
             ]

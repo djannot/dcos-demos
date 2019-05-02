@@ -1,7 +1,7 @@
 export APPNAME=poc
 export PUBLICIP=18.204.164.196
-#export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
-export PUBLICNODES=2
+export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
+export PRIVATENODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null)) | .id" | wc -l | awk '{ print $1 }')
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
@@ -14,6 +14,9 @@ export K8SISTIOPORT=80
 
 dcos package install --yes --cli dcos-enterprise-cli
 ../core/download-dcos-ca-cert.sh
+
+../core/deploy-portworx.sh infra/storage/portworx
+../core/check-status-with-name.sh portworx infra/storage/portworx
 
 ../core/deploy-kubernetes-mke.sh
 ../core/check-kubernetes-mke-status.sh
