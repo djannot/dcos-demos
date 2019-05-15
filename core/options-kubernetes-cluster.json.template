@@ -16,5 +16,8 @@
       "kube_mem": 4096
     },
     "service_cidr": "10.100.0.0/17"
+  },
+  "advanced": {
+    "enable_dcos_kubernetes_cluster_metrics_exporter": true
   }
 }
