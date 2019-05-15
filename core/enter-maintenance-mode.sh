@@ -1,9 +1,7 @@
 #!/bin/sh
 AGENT=$1
-DCOS_USER=admin
-DCOS_PASSWORD=password
-ENDPOINT=https://172.25.8.173
-TOKEN=$(curl -k -H "Content-Type: application/json" -X POST -d "{\"uid\": \"${DCOS_USER}\", \"password\": \"${DCOS_PASSWORD}\"}" $ENDPOINT/acs/api/v1/auth/login | grep token | cut -d\" -f4)
+ENDPOINT=$(dcos config show core.dcos_url)
+TOKEN=$(dcos config show core.dcos_acs_token)
 response=`curl $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json"`
 if [ "$response" == "{}" ]; then
   cat <<EOF > maintenance.json
