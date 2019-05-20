@@ -5,6 +5,7 @@
     "virtual_network_name": "dcos",
     "service_account": "${SERVICEACCOUNT}",
     "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
+    "log_level": "ALL",
     "security": {
       "kerberos": {
         "enabled": true,

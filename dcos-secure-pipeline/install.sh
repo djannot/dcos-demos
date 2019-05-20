@@ -1,7 +1,7 @@
-export APPNAME=project1
+export APPNAME=kubecon
 export OSUSER=centos
-export MASTERIP=54.175.15.133
-export PUBLICIP=3.215.10.33
+export MASTERIP=54.175.50.185
+export PUBLICIP=3.216.204.9
 export PUBLICNODES=$(dcos node list --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -25,6 +25,51 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
 ../core/deploy-kdc.sh
 ../core/deploy-hdfs.sh ${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "name-0:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-complete deploy name name-0:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "name-1:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-restart deploy name name-0:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "name-1:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-complete deploy name name-0:[node] --name=${APPNAME}/prod/dataservices/hdfs
+dcos hdfs plan force-complete deploy name name-1:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "data-0:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-complete deploy data data-0:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "data-1:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-complete deploy data data-1:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+until dcos hdfs plan status deploy --name=${APPNAME}/prod/dataservices/hdfs | grep "data-2:\[node\] (STARTED)"
+do
+  sleep 1
+done
+
+dcos hdfs plan force-complete deploy data data-2:[node] --name=${APPNAME}/prod/dataservices/hdfs
+
+
 ../core/check-status-with-name.sh hdfs ${APPNAME}/prod/dataservices/hdfs
 
 ../core/deploy-krb5.sh

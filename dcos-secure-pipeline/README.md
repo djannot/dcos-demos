@@ -143,7 +143,7 @@ Run the following command to launch jenkins in your web browser:
 
 Go to `Manage Jenkins` and click on the `Correct` button on the top right corner.
 
-Check `Pipeline: Step API` and click on `Download now and install after restart`
+Check `Pipeline: API` and `Pipeline: Step API` and click on `Download now and install after restart`
 
 Check the option to restart automatically Jenkins.
 
@@ -189,7 +189,7 @@ Download the Tensorflow script in the home directory to retrain the image classi
 
 ```
 cd ~
-curl -LO https://github.com/tensorflow/hub/raw/master/examples/image_retraining/retrain.py
+curl -LO https://raw.githubusercontent.com/tensorflow/hub/r0.4/examples/image_retraining/retrain.py
 ```
 
 Retrain the model by indicating the path where the files have been uploaded in HDFS.
