@@ -6,12 +6,24 @@ In this demo, I've used Apache NiFi to get some pictures of cats and dogs from t
 
 You need to provision a DC/OS Enterprise Edition cluster in either `permissive` or `strict` mode.
 
+It has been validated with CentOS 7.5 and the install script is deploying the `krb5-workstation` package that is needed for Kerberos.
+
 A DC/OS cluster with at least 10 private agents providing 40 CPU and 128 GB of RAM is required.
 
 If you deploy it in strict mode, you need to setup the DCOS cli using `https` (dcos cluster setup `https://`).
 
+You also need to make sure `jq` is installed on your computer.
 
 ## Deployment
+
+Edit the `install.sh` to update the environment variables, especially the 4 first lines:
+
+```
+export APPNAME=demo
+export OSUSER=centos
+export MASTERIP=18.206.220.22
+export PUBLICIP=100.24.13.32
+```
 
 You simply need to execute the following command:
 

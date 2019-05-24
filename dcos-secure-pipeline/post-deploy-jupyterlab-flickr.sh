@@ -1,4 +1,5 @@
 ../core/rendertemplate.sh `pwd`/serve-model/Jenkinsfile.template > `pwd`/serve-model/Jenkinsfile
+../core/rendertemplate.sh `pwd`/serve-model/serve-model.py.template > `pwd`/serve-model/serve-model.py
 ../core/rendertemplate.sh `pwd`/serve-model/serve-model.yaml.template > `pwd`/serve-model/serve-model.yaml
 
 task=`dcos task | grep jupyterlab | awk '{ print $5 }'`
