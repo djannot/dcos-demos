@@ -7,8 +7,9 @@ dcos security org service-accounts create -p public-kubernetes.pem -d kubernetes
 dcos security secrets delete /kubernetes/private-kubernetes
 dcos security secrets create-sa-secret --strict private-kubernetes.pem kubernetes /kubernetes/private-kubernetes
 dcos security org users grant kubernetes dcos:mesos:master:reservation:role:kubernetes-role create
+dcos security org users grant kubernetes dcos:mesos:master:reservation:principal:kubernetes delete
 dcos security org users grant kubernetes dcos:mesos:master:framework:role:kubernetes-role create
 dcos security org users grant kubernetes dcos:mesos:master:task:user:nobody create
 
 # Deploy kubernetes
-dcos package install --yes kubernetes --options=options-kubernetes-mke.json --package-version=2.3.0-1.14.1
+dcos package install --yes kubernetes --options=options-kubernetes-mke.json --package-version=2.3.2-1.14.1
