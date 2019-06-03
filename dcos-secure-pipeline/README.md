@@ -12,7 +12,7 @@ A DC/OS cluster with at least 10 private agents providing 40 CPU and 128 GB of R
 
 If you deploy it in strict mode, you need to setup the DCOS cli using `https` (dcos cluster setup `https://`).
 
-You also need to make sure `jq` is installed on your computer.
+You need to make sure `jq` and a JRA are installed on your computer.
 
 ## Deployment
 

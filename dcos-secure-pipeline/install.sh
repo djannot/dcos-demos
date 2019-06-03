@@ -2,7 +2,7 @@ export APPNAME=demo
 export OSUSER=centos
 export MASTERIP=18.206.220.22
 export PUBLICIP=100.24.13.32
-export PUBLICNODES=$(dcos node list --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
+export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export HDFSHOSTNAME=${APPNAME}proddataserviceshdfs
@@ -44,7 +44,7 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
 ../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
 
-dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p 2 photos
+dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNODES} photos
 
 ../core/check-status-with-name.sh nifi ${APPNAME}/prod/dataservices/nifi
 
