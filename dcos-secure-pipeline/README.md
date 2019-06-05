@@ -191,6 +191,8 @@ In the `Pipeline` section, select `Pipeline script from SCM` and then `Git` as t
 
 Specify the gitlab repo URL and the `root/******` credentials.
 
+The gitlab repo URL is `http://${APPNAME}devgitlab.marathon.l4lb.thisdcos.directory/root/serve-model.git`, where you replace `${APPNAME}` by the value you set in the `install.sh` script.
+
 ![jenkins-git](images/jenkins-git.png)
 
 Click on `Apply` and then on `Save`.
