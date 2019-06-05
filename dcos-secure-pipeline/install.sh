@@ -12,6 +12,14 @@ export NIFIHOSTNAME=${APPNAME}proddataservicesnifi
 export REGISTRYHOSTNAME=${APPNAME}devregistry
 export SECURE=true
 
+if [[ ! -z $1 ]]; then
+  export MASTERIP=$1
+fi
+
+if [[ ! -z $2 ]]; then
+  export PUBLICIP=$2
+fi
+
 ./private-agents.sh
 
 dcos package install --yes --cli dcos-enterprise-cli

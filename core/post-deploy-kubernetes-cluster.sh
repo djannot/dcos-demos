@@ -4,17 +4,21 @@ export SERVICEPATH=$1
 export SERVICEACCOUNT=$(echo ${SERVICEPATH} | sed 's/\//-/g')
 export URL=$(echo ${SERVICEPATH} | sed 's/\//\./g')
 
-if [ -f ~/.kube/config ]; then
-  mv ~/.kube/config ~/.kube/config.ori
+if [[ -z "${KUBECONFIG}" ]]; then
+  export KUBECONFIG=~/.kube/config
+fi
+
+if [ -f ${KUBECONFIG} ]; then
+  mv ${KUBECONFIG} ${KUBECONFIG}.ori
 fi
 
 dcos kubernetes cluster kubeconfig --context-name=${SERVICEACCOUNT} --cluster-name=${SERVICEPATH} \
   --apiserver-url https://${URL}.mesos.lab:8443 \
   --insecure-skip-tls-verify
-mv ~/.kube/config ./config.${SERVICEACCOUNT}
+mv ${KUBECONFIG} ./config.${SERVICEACCOUNT}
 
-if [ -f ~/.kube/config.ori ]; then
-  mv ~/.kube/config.ori ~/.kube/config
+if [ -f ${KUBECONFIG}.ori ]; then
+  mv ${KUBECONFIG}.ori ${KUBECONFIG}
 fi
 
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-prereqs.yaml

@@ -3,7 +3,7 @@ cd $(dirname $0)
 export SERVICEPATH=$1
 
 rm -f nifi.config-secret
-trustca=$(base64 trust-ca.jks)
+trustca=$(base64 trust-ca.jks | tr -d \\n)
 echo "#!/bin/bash" >> nifi.config-secret
 echo "cat > trust-ca.jks.base64 << EOF" >> nifi.config-secret
 echo $trustca >> nifi.config-secret
