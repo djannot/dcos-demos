@@ -115,11 +115,11 @@ The password is `jupyter`
 
 Click on the `Terminal` icon to launch a terminal inside the Notebook.
 
-Run the following command until the value doesn't change anymore (which means that NiFi has downloaded all the pictures). You should get around 1700 pictures.
+Run the following command until the value doesn't change anymore (which means that NiFi has downloaded all the pictures). You should get around 1700 pictures. It will probably take around 15 minutes.
 
 ```
 hdfs dfs -ls -R /user/nobody/flickr | wc -l
-2000
+1700
 ```
 
 Run the following command to launch gitlab in your web browser:
@@ -211,6 +211,8 @@ Retrain the model by indicating the path where the files have been uploaded in H
 ```
 python retrain.py --image_dir hdfs://hdfs/user/nobody/flickr
 ```
+
+It will probably take around 15 minutes.
 
 When the scripts terminates, upload the model generated under `~/serve-model` and push a new commit in the git repo.
 
