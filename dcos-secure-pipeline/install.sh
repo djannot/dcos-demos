@@ -1,7 +1,7 @@
 export APPNAME=demo
 export OSUSER=centos
-export MASTERIP=52.55.254.112
-export PUBLICIP=3.81.134.209
+export MASTERIP=54.159.211.213
+export PUBLICIP=54.224.155.143
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1

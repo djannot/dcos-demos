@@ -1,0 +1,69 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serve-model-deployment
+spec:
+  selector:
+    matchLabels:
+      app: serve-model
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: serve-model
+    spec:
+      containers:
+      - name: serve-model
+        image: ${REGISTRYHOSTNAME}.marathon.l4lb.thisdcos.directory:5000/serve-model:latest
+        imagePullPolicy: Always
+        command: ["flask"]
+        args: ["run", "--host=0.0.0.0"]
+        ports:
+        - containerPort: 5000
+        env:
+        - name: FLASK_APP
+          value: "/serve-model.py"
+        - name: KRB5_CONFIG
+          value: "/krb5-conf/krb5.conf"
+        - name: LD_LIBRARY_PATH
+          value: "/usr/local/lib"
+        volumeMounts:
+        - name: dcos-ca
+          mountPath: "/dcos-ca"
+          readOnly: true
+        - name: krb5-conf
+          mountPath: "krb5-conf"
+          readOnly: true
+        - name: merged-keytab
+          mountPath: "/merged-keytab"
+          readOnly: true
+      volumes:
+      - name: dcos-ca
+        secret:
+          secretName: dcos-ca
+      - name: krb5-conf
+        secret:
+          secretName: krb5-conf
+      - name: merged-keytab
+        secret:
+          secretName: merged-keytab
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubernetes.dcos.io/edgelb-pool-name: "dklb"
+    kubernetes.dcos.io/edgelb-pool-size: "${PUBLICNODES}"
+    kubernetes.dcos.io/edgelb-pool-portmap.5000: "9999"
+  labels:
+    app: serve-model
+  name: serve-model
+spec:
+  type: LoadBalancer
+  selector:
+    app: serve-model
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000

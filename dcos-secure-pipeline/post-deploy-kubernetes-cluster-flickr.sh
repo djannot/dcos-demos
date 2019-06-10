@@ -23,6 +23,8 @@ kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create rolebinding jenkins
   --serviceaccount=default:jenkins \
   --namespace=default
 
-kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic dcos-ca --from-file=../core/dcos-ca.crt
-kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic krb5-conf --from-file=../core/krb5.conf
-kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic merged-keytab --from-file=../core/merged.keytab
+if ${SECURE}; then
+  kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic dcos-ca --from-file=../core/dcos-ca.crt
+  kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic krb5-conf --from-file=../core/krb5.conf
+  kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create secret generic merged-keytab --from-file=../core/merged.keytab
+fi

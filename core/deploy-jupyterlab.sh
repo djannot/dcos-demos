@@ -21,5 +21,9 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:user:nobo
 dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:framework:role:${SERVICEACCOUNT} create
 dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:app_id:/${SERVICEPATH} create
 
-./rendertemplate.sh marathon-jupyterlab.json.template > marathon-jupyterlab.json
+if [[ ! -z ${HDFSHOSTNAME} ]]; then
+  ./rendertemplate.sh marathon-jupyterlab.json.template > marathon-jupyterlab.json
+else
+  ./rendertemplate.sh marathon-jupyterlab.json.template.nohdfs > marathon-jupyterlab.json
+fi
 dcos marathon app add marathon-jupyterlab.json

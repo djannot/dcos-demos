@@ -1,6 +1,10 @@
 # DC/OS Secure ML Pipeline
 
-In this demo, I've used Apache NiFi to get some pictures of cats and dogs from the Flickr API, stored them in HDFS, retrained a Tensorflow model to classify these new categories and used a CI/CD pipeline (using Gitlab and Jenkins) to deploy on Kubernetes a web application leveraging this model.
+In this demo, I use Apache NiFi to get some pictures of cats and dogs from the Flickr API, store half of them in HDFS and produce the other half in Kafka, retrain a Tensorflow model to classify the pictures using Jupyterlab and use a CI/CD pipeline (using Gitlab and Jenkins) to deploy on Kubernetes a web application leveraging this model (by uploading a picture or consuming from Kafka).
+
+![demo](images/demo.png)
+
+There is lighter version of this demo available [here](README-light.md).
 
 ## Prerequisites
 
@@ -8,7 +12,7 @@ You need to provision a DC/OS Enterprise Edition cluster in either `permissive` 
 
 It has been validated with CentOS 7.5 and the install script is deploying the `krb5-workstation` package that is needed for Kerberos.
 
-A DC/OS cluster with at least 10 private agents providing 40 CPU and 128 GB of RAM is required.
+A DC/OS cluster with at least 10 private agents providing 60 CPU and 128 GB of RAM is required.
 
 If you deploy it in strict mode, you need to setup the DCOS cli using `https` (dcos cluster setup `https://`).
 
@@ -31,11 +35,11 @@ You simply need to execute the following command:
 ./install.sh
 ```
 
-It will deploy Apache HDFS, Kafka (with its own dedicated ZooKeeper), Spark, NiFi and Jupyter with Kerberos and TLS.
+It will deploy Apache HDFS, Kafka (with its own dedicated ZooKeeper), NiFi and Jupyter with Kerberos and TLS.
 
 A `KDC` will also be deployed, but if you'd like to reuse the same approach to deploy this stack in production, you would skip this step and use your own KDC (which could be Active Directory, for example).
 
-## demo script
+## Demo script
 
 Run the following command to launch NiFi in your web browser:
 

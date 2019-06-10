@@ -24,30 +24,8 @@ spec:
         env:
         - name: FLASK_APP
           value: "/serve-model.py"
-        - name: KRB5_CONFIG
-          value: "/krb5-conf/krb5.conf"
         - name: LD_LIBRARY_PATH
           value: "/usr/local/lib"
-        volumeMounts:
-        - name: dcos-ca
-          mountPath: "/dcos-ca"
-          readOnly: true
-        - name: krb5-conf
-          mountPath: "krb5-conf"
-          readOnly: true
-        - name: merged-keytab
-          mountPath: "/merged-keytab"
-          readOnly: true
-      volumes:
-      - name: dcos-ca
-        secret:
-          secretName: dcos-ca
-      - name: krb5-conf
-        secret:
-          secretName: krb5-conf
-      - name: merged-keytab
-        secret:
-          secretName: merged-keytab
 ---
 apiVersion: v1
 kind: Service
