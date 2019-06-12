@@ -1,5 +1,5 @@
 export APPNAME=poc
-export PUBLICIP=34.213.127.37
+export PUBLICIP=34.207.100.220
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PRIVATENODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null)) | .id" | wc -l | awk '{ print $1 }')
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -21,13 +21,13 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kubernetes-mke.sh
 ../core/check-kubernetes-mke-status.sh
 
-../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1 true 2.1.1-1.12.5
+../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1 true 2.2.2-1.13.5
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
 
 ../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster2 false
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster2
 
-dcos kubernetes cluster update --cluster-name=${APPNAME}/prod/k8s/cluster1 --package-version=2.2.0-1.13.3 --yes
+dcos kubernetes cluster update --cluster-name=${APPNAME}/prod/k8s/cluster1 --package-version=2.3.3-1.14.3 --yes
 
 ../core/deploy-edgelb.sh infra/network/dcos-edgelb
 

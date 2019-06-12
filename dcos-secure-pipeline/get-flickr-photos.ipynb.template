@@ -20,7 +20,7 @@
     "from confluent_kafka import Producer, KafkaError\n",
     "\n",
     "p = Producer({\n",
-    "    'bootstrap.servers': 'kafka-0-broker.demoproddataserviceskafka.autoip.dcos.thisdcos.directory:1025'\n",
+    "    'bootstrap.servers': 'kafka-0-broker.${APPNAME}proddataserviceskafka.autoip.dcos.thisdcos.directory:1025'\n",
     "})\n",
     "\n",
     "flickr = flickrapi.FlickrAPI(\"3b8b1c4cd8b323056b031cfa5f8cf2d7\", \"a87556ccc243b54c\")\n",
@@ -29,7 +29,7 @@
     "    url_l = photo.get(\"url_l\")\n",
     "    if(url_s != None and url_l != None):\n",
     "        try:\n",
-    "            p.produce(\"photos2\", '{\"url_s\": \"' + url_s + '\", \"url_l\": \"' + url_l + '\"}')\n",
+    "            p.produce(\"photos\", '{\"url_s\": \"' + url_s + '\", \"url_l\": \"' + url_l + '\"}')\n",
     "        except:\n",
     "            print(\"Can't produce data for a photo, you can ignore this error\")"
    ]

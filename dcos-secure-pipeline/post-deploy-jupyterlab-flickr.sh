@@ -5,6 +5,7 @@ if ${SECURE}; then
 else
   ../core/rendertemplate.sh `pwd`/serve-model/serve-model.py.template > `pwd`/serve-model/serve-model.py
   ../core/rendertemplate.sh `pwd`/serve-model/serve-model.yaml.template > `pwd`/serve-model/serve-model.yaml
+  ../core/rendertemplate.sh `pwd`/get-flickr-photos.ipynb.template > `pwd`/get-flickr-photos.ipynb
 fi
 
 task=`dcos task | grep jupyterlab | awk '{ print $5 }'`
