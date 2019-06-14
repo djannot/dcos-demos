@@ -3,5 +3,11 @@
     "name": "${SERVICEPATH}",
     "service_account": "${SERVICEACCOUNT}",
     "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
+  },
+  "prometheus": {
+    "mem": 4096
+  },
+  "pushgateway": {
+    "enabled": true
   }
 }

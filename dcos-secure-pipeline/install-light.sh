@@ -8,6 +8,7 @@ export K8SHOSTNAME=${APPNAME}prodk8scluster1
 export KAFKAZOOKEEPERHOSTNAME=${APPNAME}proddataserviceskafka-zookeeper
 export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
 export REGISTRYHOSTNAME=${APPNAME}devregistry
+export HDFSHOSTNAME=
 export SECURE=false
 
 if [[ ! -z $1 ]]; then
@@ -31,11 +32,11 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
 ../core/deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
 ../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
+../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
+
 ../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
 ../core/check-app-status.sh ${APPNAME}/prod/datascience/jupyterlab
 ./post-deploy-jupyterlab-flickr.sh
-
-../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
 
 ../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
 

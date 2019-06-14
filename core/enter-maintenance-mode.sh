@@ -2,7 +2,7 @@
 AGENT=$1
 ENDPOINT=$(dcos config show core.dcos_url)
 TOKEN=$(dcos config show core.dcos_acs_token)
-response=`curl $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json"`
+response=`curl -k $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json"`
 if [ "$response" == "{}" ]; then
   cat <<EOF > maintenance.json
 {
@@ -20,13 +20,13 @@ if [ "$response" == "{}" ]; then
 }
 EOF
 else
-  curl $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json" | jq --arg ip "$AGENT" '.windows[0].machine_ids += [{"hostname": $ip, "ip": $ip}]' > maintenance.json
+  curl -k $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json" | jq --arg ip "$AGENT" '.windows[0].machine_ids += [{"hostname": $ip, "ip": $ip}]' > maintenance.json
 fi
-curl $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json" -X POST -d @maintenance.json
+curl -k $ENDPOINT/mesos/maintenance/schedule -H "Authorization: token=$TOKEN" -H "Content-type: application/json" -X POST -d @maintenance.json
 sleep 60
 cat <<EOF > down.json
 [
  { "hostname" : "$AGENT", "ip" : "$AGENT" }
 ]
 EOF
-curl $ENDPOINT/mesos/machine/down -H "Authorization: token=$TOKEN" -H "Content-type: application/json" -X POST -d @down.json
+curl -k $ENDPOINT/mesos/machine/down -H "Authorization: token=$TOKEN" -H "Content-type: application/json" -X POST -d @down.json
