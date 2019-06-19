@@ -24,8 +24,8 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:app_id fu
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:${SERVICEPATH}/pools/all full
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:${SERVICEPATH}/pools/dklb full
 
-dcos package repo add --index=0 edgelb-aws https://downloads.mesosphere.com/edgelb/v1.3.0/assets/stub-universe-edgelb.json
-dcos package repo add --index=0 edgelb-pool-aws https://downloads.mesosphere.com/edgelb-pool/v1.3.0/assets/stub-universe-edgelb-pool.json
+dcos package repo add --index=0 edgelb-aws https://downloads.mesosphere.com/edgelb/v1.3.1/assets/stub-universe-edgelb.json
+dcos package repo add --index=0 edgelb-pool-aws https://downloads.mesosphere.com/edgelb-pool/v1.3.1/assets/stub-universe-edgelb-pool.json
 
 ./rendertemplate.sh options-edgelb.json.template > options-edgelb.json
-dcos package install --yes edgelb --options=options-edgelb.json --package-version=v1.3.0
+dcos package install --yes edgelb --options=options-edgelb.json --package-version=v1.3.1
