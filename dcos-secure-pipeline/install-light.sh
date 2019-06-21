@@ -70,5 +70,6 @@ do
 done
 
 ../core/post-deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1
+cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/config
 ./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
 ./post-deploy-jenkins.sh ${APPNAME}/prod/k8s/cluster1
