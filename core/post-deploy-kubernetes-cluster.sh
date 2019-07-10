@@ -21,5 +21,7 @@ if [ -f ${KUBECONFIG}.ori ]; then
   mv ${KUBECONFIG}.ori ${KUBECONFIG}
 fi
 
+./create-dklb-secret.sh ${SERVICEACCOUNT}
+
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-prereqs.yaml
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-deployment.yaml

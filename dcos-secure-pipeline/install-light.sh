@@ -1,7 +1,7 @@
 export APPNAME=demo
 export OSUSER=centos
-export MASTERIP=3.90.168.180
-export PUBLICIP=52.55.237.46
+export MASTERIP=3.90.25.105
+export PUBLICIP=3.90.233.162
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -50,7 +50,7 @@ dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNOD
 
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
 
-../core/check-status-with-name.sh beta-dcos-monitoring infra/monitoring/dcos-monitoring
+#../core/check-status-with-name.sh dcos-monitoring infra/monitoring/dcos-monitoring
 
 ../core/deploy-edgelb.sh infra/network/dcos-edgelb
 

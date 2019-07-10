@@ -1,5 +1,5 @@
 export APPNAME=poc
-export PUBLICIP=34.207.100.220
+export PUBLICIP=3.87.39.201
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PRIVATENODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null)) | .id" | wc -l | awk '{ print $1 }')
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -10,6 +10,7 @@ export ELASTICHOSTNAME=${APPNAME}proddataserviceselastic
 export SECURE=false
 export K8SLBPORT=6379
 export K8SINGRESSPORT=8080
+export K8SINGRESSTLSPORT=8081
 export K8SISTIOPORT=80
 
 dcos package install --yes --cli dcos-enterprise-cli
@@ -54,13 +55,10 @@ cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/
 curl -H "Host: http-echo-1.com" http://${PUBLICIP}:8080
 curl -H "Host: http-echo-2.com" http://${PUBLICIP}:8080
 
+curl -k --resolve http-echo-1.com:91${CLUSTER}:${PUBLICIP} https://http-echo-1.com:91${CLUSTER}
+curl -k --resolve http-echo-2.com:91${CLUSTER}:${PUBLICIP} https://http-echo-2.com:91${CLUSTER}
+
 ./deploy-helm.sh
-
-./deploy-istio.sh
-
-./deploy-istio-app-test.sh
-
-open http://${PUBLICIP}:${K8SISTIOPORT}/productpage
 
 # Refresh the page several times to see the reviews part changing
 

@@ -4,27 +4,46 @@ kubectl run --restart=Never --image hashicorp/http-echo --labels app=http-echo-2
 kubectl expose pod http-echo-1 --port 80 --target-port 80 --type NodePort --name "http-echo-1"
 kubectl expose pod http-echo-2 --port 80 --target-port 80 --type NodePort --name "http-echo-2"
 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout http-echo-1-tls.key -out http-echo-1-tls.crt -subj "/CN=http-echo-1.com"
+kubectl create secret tls http-echo-1 --key http-echo-1-tls.key --cert http-echo-1-tls.crt
+
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout http-echo-2-tls.key -out http-echo-2-tls.crt -subj "/CN=http-echo-2.com"
+kubectl create secret tls http-echo-2 --key http-echo-2-tls.key --cert http-echo-2-tls.crt
+
 cat <<EOF | kubectl create -f -
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: edgelb
-    kubernetes.dcos.io/edgelb-pool-name: "dklb"
-    kubernetes.dcos.io/edgelb-pool-size: "${PUBLICNODES}"
-    kubernetes.dcos.io/edgelb-pool-port: "${K8SINGRESSPORT}"
+    kubernetes.dcos.io/dklb-config: |
+      name: dklb
+      size: ${PUBLICNODES}
+      frontends:
+        http:
+          mode: enabled
+          port: ${K8SINGRESSPORT}
+        https:
+          port: ${K8SINGRESSTLSPORT}
   labels:
     owner: dklb
   name: dklb-echo
 spec:
+  tls:
+  - hosts:
+    - http-echo-1.com
+    secretName: http-echo-1
+  - hosts:
+    - http-echo-2.com
+    secretName: http-echo-2
   rules:
-  - host: "http-echo-1.com"
+  - host: http-echo-1.com
     http:
       paths:
       - backend:
           serviceName: http-echo-1
           servicePort: 80
-  - host: "http-echo-2.com"
+  - host: http-echo-2.com
     http:
       paths:
       - backend:

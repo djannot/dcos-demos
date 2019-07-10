@@ -73,6 +73,26 @@
             "linkBackend":{
                "defaultBackend":"${APPNAME}-prod-dataservices-elastic"
             }
+         },
+         {
+            "bindPort":8444,
+            "protocol":"HTTPS",
+            "certificates":[
+               "\$AUTOCERT"
+            ],
+            "linkBackend":{
+               "defaultBackend":"${APPNAME}-prod-k8s-cluster1-backend"
+            }
+         },
+         {
+            "bindPort":8445,
+            "protocol":"HTTPS",
+            "certificates":[
+               "\$AUTOCERT"
+            ],
+            "linkBackend":{
+               "defaultBackend":"${APPNAME}-prod-k8s-cluster2-backend"
+            }
          }
       ],
       "backends":[

@@ -20,9 +20,12 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kubernetes.dcos.io/edgelb-pool-name: "dklb"
-    kubernetes.dcos.io/edgelb-pool-size: "${PUBLICNODES}"
-    kubernetes.dcos.io/edgelb-pool-portmap.6379: "${K8SLBPORT}"
+    kubernetes.dcos.io/dklb-config: |
+      name: "dklb"
+      size: ${PUBLICNODES}
+      frontends:
+      - port: ${K8SLBPORT}
+        servicePort: 6379
   labels:
     app: redis
   name: redis
