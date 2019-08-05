@@ -96,7 +96,7 @@
     "  --conf spark.mesos.executor.gpus=1 \\\\\n",
     "  --verbose \\\\\n",
     "  --py-files $(pwd)/TensorFlowOnSpark/examples/mnist/spark/mnist_dist.py \\\\\n",
-    "  $(pwd)/TensorFlowOnSpark/examples/mnist/spark/mnist_spark.py \\\\\n",
+    "  \$(pwd)/TensorFlowOnSpark/examples/mnist/spark/mnist_spark.py \\\\\n",
     "  --cluster_size ${PRIVATEGPUNODESMINUSONE} \\\\\n",
     "  --images mnist/csv/train/images \\\\\n",
     "  --labels mnist/csv/train/labels \\\\\n",
