@@ -6,6 +6,11 @@ In this demo, I use Apache NiFi to get some pictures of cats and dogs from the F
 
 There is lighter version of this demo available [here](README-light.md).
 
+There are also 2 additional demos:
+
+- the Spam/Ham demo that allow you to understand how to use the DC/OS Spark service with secured (Kerberos and TLS) HDFS and Kafka
+- the TensorFlowOnSpark demo to allow you to understand how to use distributed TensorFlow, GPUs and Mesos quotas.
+
 ## Prerequisites
 
 You need to provision a DC/OS Enterprise Edition cluster in either `permissive` or `strict` mode.
@@ -232,3 +237,85 @@ You can also run the following command to launch another page of the web applica
 ```
 
 ![cat](images/kafka.png)
+
+## Spam/Ham demo
+
+The `create-model.sh` script creates the model using Spark and the SMSSpamCollection.txt text file that contains examples of spams and hams. This file has already been uploaded to an Amazon S3 bucket to simplify the process.
+
+![spam-ham-1](images/spam-ham-1.png)
+
+The model is stored in HDFS.
+
+The `generate-messages.sh` script generates new random messages. It is another Spark job and it's also leveraging the SMSSpamCollection.txt file to generate them. These messages are produced in Kafka.
+
+![spam-ham-2](images/spam-ham-2.png)
+
+Execute these 2 scripts to launch the 2 Spark jobs.
+
+![spam-ham-spark](images/spam-ham-spark.png)
+
+We'll now use the model previously created to classify the incoming messages. It will consume the messages from Kafka and will display the accuracy of the process.
+
+![spam-ham-3](images/spam-ham-3.png)
+
+Run the following command to launch the Jupyter notebook in your web browser:
+
+```
+./open-data-science-engine-cpu.sh
+```
+
+Open the `spam-ham.ipynb` notebook and execute the 3 first paragraphs to consumed the messages from Kafka and calculate the accuracy of the model in predicting Spams and Hams.
+
+![spam-ham-notebook](images/spam-ham-notebook.png)
+
+You can take a look at the Mesos UI to see the tasks running.
+
+![spam-ham-mesos-1](images/spam-ham-mesos-1.png)
+
+You can also see that there is a quota applied to this Jupyterlab instance.
+
+![spam-ham-mesos-2](images/spam-ham-mesos-2.png)
+
+Then, click on `Kernel` and select `Shutdown Kernel` to release the resources.
+
+## TensorFlowOnSpark demo
+
+By combining salient features from the TensorFlow deep learning framework with Apache Spark and Apache Hadoop, [TensorFlowOnSpark](https://github.com/yahoo/TensorFlowOnSpark) enables distributed deep learning on a cluster of GPU and CPU servers.
+
+In this demo, we are using the MNIST database to train a model recognizing handwritten digits.
+
+We'll start with CPUs.
+
+![tensorflowonspark-cpu](images/tensorflowonspark-cpu.png)
+
+Run the following command to launch the Jupyter notebook in your web browser:
+
+```
+./open-data-science-engine-cpu.sh
+```
+
+Open the `tensorflow_on_spark_mnist_cpu_kerberos.ipynb` notebook and execute all the paragraphs one after the other.
+
+![tensorflowonspark-notebook-cpu](images/tensorflowonspark-notebook-cpu.png)
+
+The 6th paragraph will load the MNIST dataset into HDFS while the 8th paragraph will launch the TensorFlowOnSpark job.
+
+Then, click on `Kernel` and select `Shutdown Kernel` to release the resources.
+
+We'll now do the same with GPUs (if you deployed a cluster with GPUs).
+
+![tensorflowonspark-gpu](images/tensorflowonspark-gpu.png)
+
+Run the following command to launch the Jupyter notebook in your web browser:
+
+```
+./open-data-science-engine-gpu.sh
+```
+
+Open the `tensorflow_on_spark_mnist_gpu_kerberos.ipynb` notebook and execute all the paragraphs one after the other.
+
+![tensorflowonspark-notebook-gpu](images/tensorflowonspark-notebook-gpu.png)
+
+The 6th paragraph will load the MNIST dataset into HDFS while the 8th paragraph will launch the TensorFlowOnSpark job, but this time will use GPUs to create the model.
+
+Then, click on `Kernel` and select `Shutdown Kernel` to release the resources.
