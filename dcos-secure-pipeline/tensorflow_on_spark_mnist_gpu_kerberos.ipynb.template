@@ -67,7 +67,7 @@
     "  --conf spark.mesos.gpus.max=${PRIVATEGPUNODESMINUSONE} \\\\\n",
     "  --conf spark.mesos.executor.gpus=1 \\\\\n",
     "  --verbose \\\\\n",
-    "  $(pwd)/TensorFlowOnSpark/examples/mnist/mnist_data_setup.py \\\\\n",
+    "  \$(pwd)/TensorFlowOnSpark/examples/mnist/mnist_data_setup.py \\\\\n",
     "  --output mnist/csv \\\\\n",
     "  --format csv"
    ]
