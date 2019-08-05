@@ -1,0 +1,16 @@
+dcos spark run --submit-args="\
+--name=model
+--kerberos-principal=hdfs/name-0-node.${HDFSHOSTNAME}.autoip.dcos.thisdcos.directory@MESOS.LAB \
+--conf spark.mesos.containerizer=mesos \
+--conf spark.mesos.principal=${APPNAME}-prod-dataservices-spark \
+--keytab-secret-path=${APPNAME}/prod/dataservices/spark/keytab \
+--keystore-secret-path=${APPNAME}/prod/dataservices/spark/keystore \
+--keystore-password=changeit \
+--private-key-password=changeit \
+--truststore-secret-path=${APPNAME}/prod/dataservices/spark/truststore \
+--truststore-password=changeit \
+--executor-auth-secret=${APPNAME}/prod/dataservices/spark/spark-auth-secret \
+--conf spark.cores.max=2 \
+--conf spark.mesos.uris=http://s3-eu-west-1.amazonaws.com/djannot1/SMSSpamCollection.txt \
+--class SpamHamModelFactory https://djannot1.s3.amazonaws.com/dcos-spark-scala-tests-assembly-0.1-SNAPSHOT.jar file:///mnt/mesos/sandbox/SMSSpamCollection.txt 0.8 hdfs:///nb_model" \
+--name=${APPNAME}/prod/dataservices/spark

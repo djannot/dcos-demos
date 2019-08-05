@@ -1,0 +1,51 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "jupyter_password": "jupyter",
+    "jupyter_conf_urls": "http://api.${HDFSHOSTNAME}.marathon.l4lb.thisdcos.directory/v1/endpoints",
+    "service_account": "${SERVICEACCOUNT}",
+    "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
+  },
+  "networking": {
+    "virtual_network_enabled": true,
+    "virtual_network_name": "dcos",
+    "ingress": {
+      "enabled": false
+    }
+  },
+  "security": {
+    "kerberos": {
+      "enabled": true,
+      "kdc": {
+        "hostname": "kdc.marathon.containerip.dcos.thisdcos.directory",
+        "port": 88
+      },
+      "realm": "MESOS.LAB",
+      "primary": "hdfs",
+      "keytab_secret": "${SERVICEPATH}/keytab"
+    },
+    "tls": {
+      "enabled": true,
+      "protocol": "TLSv1.2",
+      "truststore_secret": "${SERVICEPATH}/truststore",
+      "truststore_password": "${SERVICEPATH}/truststore-password",
+      "keystore_secret": "${SERVICEPATH}/keystore",
+      "keystore_password": "${SERVICEPATH}/keystore-password",
+      "key_password": "${SERVICEPATH}/key-password",
+      "ca_bundle_secret": "${SERVICEPATH}/truststore-ca"
+    }
+  },
+  "spark": {
+    "spark_jars_packages": "org.apache.spark:spark-streaming-kafka-0-10_2.11:2.4.0,org.apache.kafka:kafka_2.11:0.10.2.2",
+    "spark_mesos_principal": "${SERVICEACCOUNT}",
+    "spark_mesos_role": "${SERVICEACCOUNT}",
+    "spark_mesos_containerizer": "mesos",
+    "spark_driver_java_options": "-server -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/mnt/mesos/sandbox -Djava.security.auth.login.config=/mnt/mesos/sandbox/jaas.conf",
+    "spark_executor_java_options": "-server -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/mnt/mesos/sandbox -Djava.security.auth.login.config=/mnt/mesos/sandbox/jaas.conf",
+    "spark_executor_hadoop_opts": "-Djava.library.path=/opt/hadoop/lib/native",
+    "spark_user": "nobody"
+  },
+  "advanced": {
+    "java_opts": "-server -XX:+UseG1GC -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/mnt/mesos/sandbox"
+  }
+}

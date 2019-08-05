@@ -9,4 +9,4 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 
 ./rendertemplate.sh options-dcos-monitoring.json.template > options-dcos-monitoring.json
 
-dcos package install dcos-monitoring --yes --options=options-dcos-monitoring.json
+dcos package install dcos-monitoring --yes --options=options-dcos-monitoring.json --package-version=v1.0.1

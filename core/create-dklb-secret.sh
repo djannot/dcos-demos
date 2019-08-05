@@ -14,6 +14,7 @@ if ! dcos security org service-accounts show "${SERVICE_ACCOUNT_NAME}" &>/dev/nu
   # create service account
   dcos security org service-accounts keypair dklb-private-key.pem dklb-public-key.pem
   dcos security org service-accounts create -p dklb-public-key.pem -d "dklb service account" ${SERVICE_ACCOUNT_NAME}
+  ./delete-secret.sh ${SERVICE_ACCOUNT_NAME}/sa
   dcos security secrets create-sa-secret dklb-private-key.pem ${SERVICE_ACCOUNT_NAME} ${SERVICE_ACCOUNT_NAME}/sa
 
   # grant the possibility to manage and list the secrets

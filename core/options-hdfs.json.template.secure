@@ -25,6 +25,7 @@
     }
   },
   "hdfs": {
-    "security_auth_to_local": "UlVMRTpbMTokMUAkMF0oLipATUVTT1MuTEFCKXMvQC4qLy8vTApSVUxFOlsyOiQxQCQwXSguKilzLy4qL25vYm9keS8KUlVMRTpbMTokMUAkMF0oLiopcy8uKi9ub2JvZHkvCg=="
+    "security_auth_to_local": "UlVMRTpbMTokMUAkMF0oLipATUVTT1MuTEFCKXMvQC4qLy8vTApSVUxFOlsyOiQxQCQwXSguKilzLy4qL25vYm9keS8KUlVMRTpbMTokMUAkMF0oLiopcy8uKi9ub2JvZHkvCg==",
+    "hadoop_user_group_static_mapping_overrides": "hdfs=supergroup;client=supergroup;nobody=supergroup"
   }
 }

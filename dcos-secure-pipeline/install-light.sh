@@ -1,7 +1,7 @@
 export APPNAME=demo
 export OSUSER=centos
-export MASTERIP=3.90.25.105
-export PUBLICIP=3.90.233.162
+export MASTERIP=$(dcos node --json | jq --raw-output ".[] | select(.type | test(\"master\")) | .public_ips[0]" | head -1)
+export PUBLICIP=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .public_ips[0]" | head -1)
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 #export PUBLICNODES=2
 export K8SHOSTNAME=${APPNAME}prodk8scluster1
@@ -10,6 +10,7 @@ export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
 export REGISTRYHOSTNAME=${APPNAME}devregistry
 export HDFSHOSTNAME=
 export SECURE=false
+export GPU=true
 
 if [[ ! -z $1 ]]; then
   export MASTERIP=$1
@@ -30,13 +31,14 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-registry.sh ${APPNAME}/dev/registry
 ../core/deploy-gitlab.sh ${APPNAME}/dev/gitlab
 ../core/deploy-jenkins.sh ${APPNAME}/dev/jenkins
-../core/deploy-jupyterlab.sh ${APPNAME}/prod/datascience/jupyterlab
+../core/deploy-data-science-engine.sh ${APPNAME}/prod/datascience/data-science-engine-cpu
 ../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
 ../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
 
 ../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
-../core/check-app-status.sh ${APPNAME}/prod/datascience/jupyterlab
-./post-deploy-jupyterlab-flickr.sh
+../core/check-app-status.sh ${APPNAME}/prod/datascience/data-science-engine-cpu
+
+./post-deploy-data-science-engine-flickr.sh
 
 ../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
 

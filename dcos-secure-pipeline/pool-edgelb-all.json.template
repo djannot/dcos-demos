@@ -26,8 +26,12 @@
                      "backend":"${APPNAME}-prod-dataservices-nifi"
                   },
                   {
-                     "hostReg":"${APPNAME}.prod.datascience.jupyterlab.mesos.lab",
-                     "backend":"${APPNAME}-prod-datascience-jupyterlab"
+                     "hostReg":"${APPNAME}.prod.datascience.datascienceenginecpu.mesos.lab",
+                     "backend":"${APPNAME}-prod-datascience-data-science-engine-cpu"
+                  },
+                  {
+                     "hostReg":"${APPNAME}.prod.datascience.datascienceenginegpu.mesos.lab",
+                     "backend":"${APPNAME}-prod-datascience-data-science-engine-gpu"
                   },
                   {
                      "hostReg":"${APPNAME}.dev.gitlab.mesos.lab",
@@ -43,13 +47,26 @@
       ],
       "backends":[
          {
-            "name": "${APPNAME}-prod-datascience-jupyterlab",
+            "name": "${APPNAME}-prod-datascience-data-science-engine-cpu",
             "protocol": "HTTP",
             "services": [
                {
                   "endpoint": {
                      "type": "ADDRESS",
-                     "address": "${APPNAME}proddatasciencejupyterlab.marathon.l4lb.thisdcos.directory",
+                     "address": "${APPNAME}proddatasciencedata-science-engine-cpu.marathon.l4lb.thisdcos.directory",
+                     "port": 8888
+                  }
+               }
+            ]
+         },
+         {
+            "name": "${APPNAME}-prod-datascience-data-science-engine-gpu",
+            "protocol": "HTTP",
+            "services": [
+               {
+                  "endpoint": {
+                     "type": "ADDRESS",
+                     "address": "${APPNAME}proddatasciencedata-science-engine-gpu.marathon.l4lb.thisdcos.directory",
                      "port": 8888
                   }
                }
@@ -74,7 +91,7 @@
             "name":"${APPNAME}-prod-dataservices-nifi",
             "protocol":"HTTPS",
             "rewriteHttp":{
-               "host":"nifi-0-node.${APPNAME}proddataservicesnifi.autoip.dcos.thisdcos.directory",
+               "host":"node.demoproddataservicesnifi.l4lb.thisdcos.directory",
                "path":{
                   "fromPath":"/nifi",
                   "toPath":"/nifi"
@@ -85,16 +102,21 @@
                   "xForwardedProtoHttpsIfTls":true,
                   "setHostHeader":false,
                   "rewritePath":true
+               },
+               "sticky":{
+                 "enabled":true
                }
             },
             "services":[
-               {
-                  "endpoint":{
-                     "type":"ADDRESS",
-                     "address":"nifi-1-node.${APPNAME}proddataservicesnifi.autoip.dcos.thisdcos.directory",
-                     "port":1025
-                  }
-               }
+              {
+                 "mesos":{
+                    "frameworkName":"${APPNAME}/prod/dataservices/nifi",
+                    "taskNamePattern":"node"
+                 },
+                 "endpoint":{
+                    "port":1025
+                 }
+              }
             ]
          },
          {

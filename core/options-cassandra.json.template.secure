@@ -11,5 +11,11 @@
         "allow_plaintext": false
       }
     }
+  },
+  "nodes": {
+    "count": 3,
+    "disk": 10240,
+    "disk_type": "MOUNT",
+    "volume_profile": "fast"
   }
 }

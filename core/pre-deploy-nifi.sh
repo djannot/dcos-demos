@@ -15,5 +15,5 @@ echo "base64 --decode /mnt/mesos/sandbox/trust-ca.jks.base64 > /mnt/mesos/sandbo
 cat curl.function >> nifi.config-secret
 echo "__curl http://api.${HDFSHOSTNAME}.marathon.l4lb.thisdcos.directory/v1/endpoints/core-site.xml > /mnt/mesos/sandbox/core-site.xml" >> nifi.config-secret
 echo "__curl http://api.${HDFSHOSTNAME}.marathon.l4lb.thisdcos.directory/v1/endpoints/hdfs-site.xml > /mnt/mesos/sandbox/hdfs-site.xml" >> nifi.config-secret
-dcos security secrets delete ${SERVICEPATH}/config-secret
+./delete-secret.sh ${SERVICEPATH}/config-secret
 dcos security secrets create ${SERVICEPATH}/config-secret --file nifi.config-secret

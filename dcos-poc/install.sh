@@ -1,5 +1,5 @@
 export APPNAME=poc
-export PUBLICIP=3.87.39.201
+export PUBLICIP=52.54.176.64
 export PUBLICNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip != null)) | .id" | wc -l | awk '{ print $1 }')
 export PRIVATENODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null)) | .id" | wc -l | awk '{ print $1 }')
 export K8SHOSTNAME=${APPNAME}prodk8scluster1

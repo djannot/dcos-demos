@@ -5,8 +5,10 @@ export SERVICEACCOUNT=$(echo ${SERVICEPATH} | sed 's/\//-/g')
 
 ./create-service-account.sh
 
-dcos security org users grant ${SERVICEACCOUNT} dcos:secrets:default:/${SERVICEPATH}/* full
-dcos security org users grant ${SERVICEACCOUNT} dcos:secrets:list:default:/${SERVICEPATH} full
+dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:ops:ca:ro full
+dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:ops:ca:rw full
+dcos security org users grant ${SERVICEACCOUNT} dcos:secrets:default:/${SERVICEPATH}/pools/* full
+dcos security org users grant ${SERVICEACCOUNT} dcos:secrets:list:default:/${SERVICEPATH}/pools/* full
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:marathon full
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:package full
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:edgelb full
@@ -24,8 +26,13 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:app_id fu
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:${SERVICEPATH}/pools/all full
 dcos security org users grant ${SERVICEACCOUNT} dcos:adminrouter:service:${SERVICEPATH}/pools/dklb full
 
+dcos package repo remove edgelb-aws
 dcos package repo add --index=0 edgelb-aws https://downloads.mesosphere.com/edgelb/v1.3.1/assets/stub-universe-edgelb.json
+#dcos package repo add --index=0 edgelb-aws https://downloads.mesosphere.com/edgelb/v1.4.0/assets/stub-universe-edgelb.json
+dcos package repo remove edgelb-pool-aws
 dcos package repo add --index=0 edgelb-pool-aws https://downloads.mesosphere.com/edgelb-pool/v1.3.1/assets/stub-universe-edgelb-pool.json
+#dcos package repo add --index=0 edgelb-pool-aws https://downloads.mesosphere.com/edgelb-pool/v1.4.0/assets/stub-universe-edgelb-pool.json
 
 ./rendertemplate.sh options-edgelb.json.template > options-edgelb.json
 dcos package install --yes edgelb --options=options-edgelb.json --package-version=v1.3.1
+#dcos package install --yes edgelb --options=options-edgelb.json --package-version=v1.4.0

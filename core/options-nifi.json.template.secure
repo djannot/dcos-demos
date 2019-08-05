@@ -33,6 +33,6 @@
     "enable": true
   },
   "web": {
-    "proxy_host": "${URL}.mesos.lab:8443,nifi-0-node.${NIFIHOSTNAME}:1025,nifi-0-node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:8080,"
+    "proxy_host": "${URL}.mesos.lab:8443,nifi-0-node.${NIFIHOSTNAME}:1025,nifi-0-node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,nifi-1-node.${NIFIHOSTNAME}:1025,nifi-1-node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:1025,node.${NIFIHOSTNAME}.autoip.dcos.thisdcos.directory:8080,node.${NIFIHOSTNAME}.l4lb.thisdcos.directory:8080"
   }
 }

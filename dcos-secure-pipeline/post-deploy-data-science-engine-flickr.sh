@@ -8,7 +8,7 @@ else
   ../core/rendertemplate.sh `pwd`/get-flickr-photos.ipynb.template > `pwd`/get-flickr-photos.ipynb
 fi
 
-task=`dcos task | grep jupyterlab | awk '{ print $5 }'`
+task=`dcos task | grep data-science-engine-cpu | awk '{ print $5 }'`
 dcos task exec -i $task sh -c 'mkdir /mnt/mesos/sandbox/serve-model'
 if ${SECURE}; then
   dcos task exec -i $task sh -c 'cat > /mnt/mesos/sandbox/serve-model/Dockerfile' < ./serve-model/Dockerfile.secure

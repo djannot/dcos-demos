@@ -2519,7 +2519,7 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingPeriod>100000000 min</schedulingPeriod>
                         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>
@@ -4767,7 +4767,7 @@
                             </entry>
                         </properties>
                         <runDurationMillis>0</runDurationMillis>
-                        <schedulingPeriod>0 sec</schedulingPeriod>
+                        <schedulingPeriod>100000000 min</schedulingPeriod>
                         <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
                         <yieldDuration>1 sec</yieldDuration>
                     </config>

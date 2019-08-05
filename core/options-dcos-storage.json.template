@@ -1,0 +1,8 @@
+{
+  "service": {
+    "name": "${SERVICEPATH}",
+    "enforce-authorization": true,
+    "principal": "${SERVICEACCOUNT}",
+    "secret-name": "/${SERVICEPATH}/private-${SERVICEACCOUNT}"
+  }
+}

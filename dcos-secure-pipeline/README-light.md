@@ -23,8 +23,6 @@ Edit the `install-light.sh` to update the environment variables, especially the 
 ```
 export APPNAME=demo
 export OSUSER=centos
-export MASTERIP=18.206.220.22
-export PUBLICIP=100.24.13.32
 ```
 
 You simply need to execute the following command:
@@ -38,7 +36,7 @@ You simply need to execute the following command:
 Run the following command to launch the Jupyter notebook in your web browser:
 
 ```
-./open-jupyterlab.sh
+./open-data-science-engine-cpu.sh
 ```
 
 The password is `jupyter`

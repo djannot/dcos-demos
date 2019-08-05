@@ -12,9 +12,8 @@ data "http" "whatismyip" {
 }
 
 module "dcos" {
-  #source  = "dcos-terraform/dcos/aws"
-  source  = "git::ssh://git@github.com/dcos-terraform/terraform-aws-dcos?ref=release/v0.2"
-  custom_dcos_download_path = "http://downloads.mesosphere.com/dcos-enterprise/stable/1.13.0/dcos_generate_config.ee.sh"
+  source  = "dcos-terraform/dcos/aws"
+  custom_dcos_download_path = "http://downloads.mesosphere.com/dcos-enterprise/stable/1.13.3/dcos_generate_config.ee.sh"
   version = "~> 0.2.0"
 
   providers = {
@@ -27,25 +26,27 @@ module "dcos" {
   #admin_ips           = ["${data.http.whatismyip.body}/32"]
   admin_ips           = ["0.0.0.0/0"]
 
-  num_masters        = "3"
-  num_private_agents = "5"
+  num_masters        = "1"
+  num_private_agents = "12"
   num_public_agents  = "2"
 
-  dcos_version = "1.13.0"
+  dcos_version = "1.13.3"
 
   dcos_variant              = "ee"
   dcos_license_key_contents = "${file("./license.txt")}"
   #dcos_variant = "open"
 
-  dcos_security = "strict"
+  dcos_security = "permissive"
+  private_agents_instance_type = "m4.2xlarge"
   public_agents_instance_type = "m4.2xlarge"
-  private_agents_instance_type = "c4.8xlarge"
+  #private_agents_instance_type = "c4.8xlarge"
+  #public_agents_instance_type = "c4.8xlarge"
 
   public_agents_additional_ports = ["8443", "9999", "10500", "10339"]
 
   tags = {
     owner = "denisjannot",
-    expiration = "12h"
+    expiration = "120h"
   }
 }
 

@@ -6,8 +6,7 @@
     "name": "${SERVICEPATH}",
     "service_account": "${SERVICEACCOUNT}",
     "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
-    "use_agent_docker_certs": true,
-    "dcos_token_authentication": true
+    "use_agent_docker_certs": true
   },
   "kubernetes": {
     "authorization_mode": "RBAC",
@@ -20,6 +19,7 @@
     "service_cidr": "10.100.0.0/17",
     "metrics_exporter": {
       "enabled": true
-    }
+    },
+    "dcos_token_authentication": true
   }
 }

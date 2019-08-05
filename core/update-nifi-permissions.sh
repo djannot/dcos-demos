@@ -6,15 +6,19 @@ export URL=$(echo ${SERVICEPATH} | sed 's/\//\./g')
 
 #dcos task exec -i nifi-0-node sh -c 'export JAVA_HOME=$(ls -d $MESOS_SANDBOX/jdk*/jre*/) && export JAVA_HOME=${JAVA_HOME%/} && export PATH=$(ls -d $JAVA_HOME/bin):$PATH && $MESOS_SANDBOX/nifi-toolkit-1.5.0/bin/node-manager.sh -b $MESOS_SANDBOX/bootstrap -d $MESOS_SANDBOX/nifi-1.5.0 -p smartcity.prod.dataservices.nifi.mesos.lab'
 
-token=`curl -X POST -k \
+rm -f cookifile
+
+token=`curl -b cookiefile -c cookiefile -X POST -k \
 -d 'username=nifiadmin@MESOS.LAB&password=password' \
 https://${URL}.mesos.lab:8443/nifi-api/access/token`
 
-users=`curl -X GET -k \
+users=`curl -b cookiefile -c cookiefile -X GET -k \
 -H "Authorization: Bearer $token" \
 https://${URL}.mesos.lab:8443/nifi-api/tenants/users | jq .users[].component.id | sed -e "s/^/{ \"id\": /" | sed -e "s/$/ }/" | sed -e "$ ! s/$/,/"`
 
-admins=$(curl -X POST -k \
+#admingroup=$(curl -b cookiefile -c cookiefile -X GET -k -H "Authorization: Bearer $token" -H "Content-Type: application/json" https://${URL}.mesos.lab:8443/nifi-api/tenants/user-groups | jq --raw-output '.userGroups[0].component.id')
+
+admingroup=$(curl -b cookiefile -c cookiefile -X POST -k \
 -H "Authorization: Bearer $token" \
 -H "Content-Type: application/json" \
 https://${URL}.mesos.lab:8443/nifi-api/tenants/user-groups --data-binary @- <<BODY | jq .id | sed -e "s/\"//g"
@@ -35,12 +39,34 @@ https://${URL}.mesos.lab:8443/nifi-api/tenants/user-groups --data-binary @- <<BO
 }
 BODY)
 
-processgroup=$(curl -X GET -k \
+#curl -X PUT -k \
+#-H "Authorization: Bearer $token" \
+#-H "Content-Type: application/json" \
+#https://${URL}.mesos.lab:8443/nifi-api/tenants/user-groups/${admingroup} --data-binary @- <<BODY
+#{
+#  "revision" : {
+#    "version" : 0
+#  },
+#  "permissions" : {
+#    "canRead" : true,
+#    "canWrite" : true
+#  },
+#  "component" : {
+#    "id": "${admingroup}",
+#    "identity" : "admins",
+#    "users" : [
+#      $users
+#    ]
+#  }
+#}
+#BODY
+
+processgroup=$(curl -b cookiefile -c cookiefile -X GET -k \
 -H "Authorization: Bearer $token" \
-https://${URL}.mesos.lab:8443/nifi-api/flow/process-groups/root | jq .processGroupFlow.id | sed -e "s/\"//g")
+https://${URL}.mesos.lab:8443/nifi-api/flow/process-groups/root | jq --raw-output .processGroupFlow.id)
 
 for action in read write; do
-curl -X POST -k \
+curl -b cookiefile -c cookiefile -X POST -k \
 -H "Authorization: Bearer $token" \
 -H "Content-Type: application/json" \
 https://${URL}.mesos.lab:8443/nifi-api/policies --data-binary @- <<BODY
@@ -52,27 +78,7 @@ https://${URL}.mesos.lab:8443/nifi-api/policies --data-binary @- <<BODY
     "resource": "/process-groups/$processgroup",
     "action": "$action",
     "userGroups": [
-      { "id": "$admins" }
-    ]
-  }
-}
-BODY
-done
-
-for action in read write; do
-curl -X POST -k \
--H "Authorization: Bearer $token" \
--H "Content-Type: application/json" \
-https://${URL}.mesos.lab:8443/nifi-api/policies --data-binary @- <<BODY
-{
-  "revision" : {
-    "version" : 0
-  },
-  "component": {
-    "resource": "/data/process-groups/$processgroup",
-    "action": "$action",
-    "userGroups": [
-      { "id": "$admins" }
+      { "id": "$admingroup" }
     ]
   }
 }

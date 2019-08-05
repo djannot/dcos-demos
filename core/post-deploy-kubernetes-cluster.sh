@@ -24,4 +24,5 @@ fi
 ./create-dklb-secret.sh ${SERVICEACCOUNT}
 
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-prereqs.yaml
+./rendertemplate.sh dklb-deployment.yaml.template > dklb-deployment.yaml
 kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} create -f dklb-deployment.yaml

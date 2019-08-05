@@ -17,7 +17,7 @@ sleep 30
 ./merge-keytabs.sh
 
 # Create the secret for the keytab file
-dcos security secrets delete keytab
+./delete-secret.sh keytab
 dcos security secrets create keytab --file merged.keytab
-dcos security secrets delete krb5
+./delete-secret.sh krb5
 dcos security secrets create krb5 --file krb5.conf

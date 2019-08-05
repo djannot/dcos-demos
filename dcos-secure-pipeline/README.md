@@ -25,8 +25,6 @@ Edit the `install.sh` to update the environment variables, especially the 4 firs
 ```
 export APPNAME=demo
 export OSUSER=centos
-export MASTERIP=18.206.220.22
-export PUBLICIP=100.24.13.32
 ```
 
 You simply need to execute the following command:
@@ -110,21 +108,16 @@ There will be few errors due to pictures that aren't available on Flickr. You ca
 Run the following command to launch the Jupyter notebook in your web browser:
 
 ```
-./open-jupyterlab.sh
+./open-data-science-engine-cpu.sh
 ```
 
 The password is `jupyter`
 
 ![jupyter-launcher](images/jupyter-launcher.png)
 
-Click on the `Terminal` icon to launch a terminal inside the Notebook.
+Open the `flickr.ipynb` notebook and run the first paragraph until the value doesn't change anymore (which means that NiFi has downloaded all the pictures). You should get around 2000 pictures. It will probably take around 15 minutes.
 
-Run the following command until the value doesn't change anymore (which means that NiFi has downloaded all the pictures). You should get around 1700 pictures. It will probably take around 15 minutes.
-
-```
-hdfs dfs -ls -R /user/nobody/flickr | wc -l
-1700
-```
+![notebook-flickr-hdfs](images/notebook-flickr-hdfs.png)
 
 Run the following command to launch gitlab in your web browser:
 
@@ -134,22 +127,9 @@ Run the following command to launch gitlab in your web browser:
 
 Set the password to `password`, login with the user `root` and this password and create a new public project called `serve-model`.
 
-Go back to the terminal in the Jupyter lab notebook and run the following command to initialize the git repo.
+Go back to the notebook in Jupyterlab and run the second paragraph to initialize the git repo.
 
-You need to replace `${APPNAME}` by the value you set in the `install.sh` script.
-
-```
-cd ~/serve-model
-git config --global user.name "Administrator"
-git config --global user.email "admin@example.com"
-git init
-git remote add origin http://${APPNAME}devgitlab.marathon.l4lb.thisdcos.directory/root/serve-model.git
-git add .
-git commit -a -m "First commit"
-git push -u origin master
-```
-
-It will ask for the username and password of Gitlab (`root` / `password`)
+![notebook-flickr-git-init](images/notebook-flickr-git-init.png)
 
 Run the following command to launch jenkins in your web browser:
 
@@ -201,32 +181,15 @@ The gitlab repo URL is `http://${APPNAME}devgitlab.marathon.l4lb.thisdcos.direct
 
 Click on `Apply` and then on `Save`.
 
-Go back to the terminal in the Jupyter lab notebook.
+Go back to the notebook in Jupyter lab and run the third and fourth paragraphs to download the Tensorflow script in the home directory and to retrain the image classifier.
 
-Download the Tensorflow script in the home directory to retrain the image classifier.
-
-```
-cd ~
-curl -LO https://raw.githubusercontent.com/tensorflow/hub/r0.4/examples/image_retraining/retrain.py
-```
-
-Retrain the model by indicating the path where the files have been uploaded in HDFS.
-
-```
-python retrain.py --image_dir hdfs://hdfs/user/nobody/flickr
-```
+![notebook-flickr-tensorflow](images/notebook-flickr-tensorflow.png)
 
 It will probably take around 15 minutes.
 
-When the scripts terminates, upload the model generated under `~/serve-model` and push a new commit in the git repo.
+When it terminates, run the last paragraph to upload the model generated under `~/serve-model` and push a new commit in the git repo.
 
-```
-cd ~/serve-model
-cp /tmp/output* .
-git add .
-git commit -a -m "With model"
-git push
-```
+![notebook-flickr-git-update](images/notebook-flickr-git-update.png)
 
 This will trigger the jenkins pipeline.
 
