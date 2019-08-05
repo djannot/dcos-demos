@@ -64,7 +64,7 @@
    "outputs": [],
    "source": [
     "! spark-submit \\\\\n",
-    "  --conf spark.mesos.gpus.max=${PRIVATEGPUNODES} \\\\\n",
+    "  --conf spark.mesos.gpus.max=${PRIVATEGPUNODESMINUSONE} \\\\\n",
     "  --conf spark.mesos.executor.gpus=1 \\\\\n",
     "  --verbose \\\\\n",
     "  $(pwd)/TensorFlowOnSpark/examples/mnist/mnist_data_setup.py \\\\\n",
@@ -92,12 +92,12 @@
    "outputs": [],
    "source": [
     "! spark-submit \\\\\n",
-    "  --conf spark.mesos.gpus.max=${PRIVATEGPUNODES} \\\\\n",
+    "  --conf spark.mesos.gpus.max=${PRIVATEGPUNODESMINUSONE} \\\\\n",
     "  --conf spark.mesos.executor.gpus=1 \\\\\n",
     "  --verbose \\\\\n",
     "  --py-files $(pwd)/TensorFlowOnSpark/examples/mnist/spark/mnist_dist.py \\\\\n",
     "  $(pwd)/TensorFlowOnSpark/examples/mnist/spark/mnist_spark.py \\\\\n",
-    "  --cluster_size ${PRIVATEGPUNODES} \\\\\n",
+    "  --cluster_size ${PRIVATEGPUNODESMINUSONE} \\\\\n",
     "  --images mnist/csv/train/images \\\\\n",
     "  --labels mnist/csv/train/labels \\\\\n",
     "  --format csv \\\\\n",
