@@ -41,7 +41,7 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:framework:role
 dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:app_id:/${SERVICEPATH} create
 
 dcos package repo remove data-science-engine
-dcos package repo add --index=0 data-science-engine 'https://universe-converter.mesosphere.com/transform?url=https://infinity-artifacts.s3.amazonaws.com/autodelete7d/data-science-engine/20190801-145001-tVZGaowDAkuwUMVB/stub-universe-data-science-engine.json'
+dcos package repo add --index=0 data-science-engine 'https://universe-converter.mesosphere.com/transform?url=https://infinity-artifacts.s3.amazonaws.com/permanent/data-science-engine/assets/1.0.0/stub-universe-data-science-engine.json'
 
 if [ ! -z "$2" ] && $2; then
   ./rendertemplate.sh options-data-science-engine-gpu.json.template > options-data-science-engine.json

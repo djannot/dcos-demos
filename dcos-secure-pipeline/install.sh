@@ -11,9 +11,10 @@ export KAFKAHOSTNAME=${APPNAME}proddataserviceskafka
 export NIFIHOSTNAME=${APPNAME}proddataservicesnifi
 export REGISTRYHOSTNAME=${APPNAME}devregistry
 export SECURE=true
-export GPU=true
-if ${GPU}; then
-  export PRIVATEGPUNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null) and .unreserved_resources.gpus > 0) | .id" | wc -l | awk '{ print $1 }')
+export GPU=false
+export PRIVATEGPUNODES=$(dcos node --json | jq --raw-output ".[] | select((.type | test(\"agent\")) and (.attributes.public_ip == null) and .unreserved_resources.gpus > 0) | .id" | wc -l | awk '{ print $1 }')
+if [ "$PRIVATEGPUNODES" -ge "3" ];then
+  export GPU=true
   export PRIVATEGPUNODESMINUSONE=$(($PRIVATEGPUNODES - 1))
 fi
 
