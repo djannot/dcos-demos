@@ -1,0 +1,6 @@
+@INCLUDE /opt/mesosphere/etc/fluent-bit/agent.conf
+[OUTPUT]
+     Name es
+     Match *
+     Host data.${ELASTICHOSTNAME}.l4lb.thisdcos.directory
+     Port 9200

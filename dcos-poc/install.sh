@@ -55,8 +55,8 @@ cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/
 curl -H "Host: http-echo-1.com" http://${PUBLICIP}:8080
 curl -H "Host: http-echo-2.com" http://${PUBLICIP}:8080
 
-curl -k --resolve http-echo-1.com:91${CLUSTER}:${PUBLICIP} https://http-echo-1.com:91${CLUSTER}
-curl -k --resolve http-echo-2.com:91${CLUSTER}:${PUBLICIP} https://http-echo-2.com:91${CLUSTER}
+curl -k --resolve http-echo-1.com:8081:${PUBLICIP} https://http-echo-1.com:8081
+curl -k --resolve http-echo-2.com:8081:${PUBLICIP} https://http-echo-2.com:8081
 
 ./deploy-helm.sh
 
@@ -96,6 +96,9 @@ open https://poc.prod.dataservices.kibana.mesos.lab:8443
 
 ../core/deploy-cassandra.sh ${APPNAME}/prod/dataservices/cassandra
 ../core/check-status-with-name.sh cassandra ${APPNAME}/prod/dataservices/cassandra
+
+# Send DC/OS logs to Elasticsearch
+../core/setup-logging-to-elastic.sh
 
 # TODO Create a Cassandra test
 

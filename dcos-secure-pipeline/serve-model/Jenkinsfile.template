@@ -26,21 +26,12 @@ def gitCommit() {
 
     // Deploy
     stage 'Deploy'
-      withCredentials(
-          [[
-              \$class: 'UsernamePasswordMultiBinding',
-              credentialsId: 'kubernetes',
-              usernameVariable: 'K8S_USERNAME',
-              passwordVariable: 'K8S_PASSWORD'
-          ]]
-      ) {
-        sh "if [ ! -f ./kubectl ]; then wget -q https://storage.googleapis.com/kubernetes-release/release/v1.14.1/bin/linux/amd64/kubectl; fi"
+        sh "if [ ! -f ./kubectl ]; then wget -q https://storage.googleapis.com/kubernetes-release/release/v1.15.2/bin/linux/amd64/kubectl; fi"
         sh "chmod +x ./kubectl"
-        sh "./kubectl config set-credentials \${K8S_USERNAME} --token=\${K8S_PASSWORD}"
+        sh "./kubectl config set-credentials jenkins --token=${JENKINSK8STOKEN}"
         sh "./kubectl config set-cluster dcos-k8s --server=https://apiserver.${K8SHOSTNAME}.l4lb.thisdcos.directory:6443 --insecure-skip-tls-verify"
         sh "./kubectl config set-context dcos-k8s --cluster=dcos-k8s --namespace=default --user=jenkins"
         sh "./kubectl config use-context dcos-k8s"
         sh "./kubectl get pods"
         sh "./kubectl apply --force -f serve-model.yaml"
-      }
     }

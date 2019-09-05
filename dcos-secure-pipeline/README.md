@@ -90,7 +90,7 @@ Indicate `changeit` for the truststore password.
 
 ![nifi-invoke-http-ssl-enable](images/nifi-invoke-http-ssl-enable.png)
 
-Click on the `Enable` icon and enable it.
+Click on the `Enable` icon and enable it. You may have to click on the `Refresh` icon to have access to the `Enable` icon.
 
 Double click on the `PublishKafka_1_0` processor.
 

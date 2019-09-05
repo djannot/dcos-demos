@@ -53,13 +53,15 @@ fi
 ../core/deploy-nifi.sh ${APPNAME}/prod/dataservices/nifi
 ../core/check-app-status.sh ${APPNAME}/prod/datascience/data-science-engine-cpu
 
-../core/check-app-status.sh ${APPNAME}/prod/datascience/data-science-engine-gpu
+if ${GPU}; then
+  ../core/check-app-status.sh ${APPNAME}/prod/datascience/data-science-engine-gpu
+fi
 
 ../core/post-deploy-data-science-engine.sh ${APPNAME}/prod/datascience/data-science-engine-cpu
 if ${GPU}; then
   ../core/post-deploy-data-science-engine.sh ${APPNAME}/prod/datascience/data-science-engine-gpu
 fi
-./post-deploy-data-science-engine-flickr.sh
+
 ../core/deploy-kafka-zookeeper.sh ${APPNAME}/prod/dataservices/kafka-zookeeper
 ../core/check-status-with-name.sh kafka-zookeeper ${APPNAME}/prod/dataservices/kafka-zookeeper
 
@@ -79,7 +81,7 @@ dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNOD
 
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
 
-#../core/check-status-with-name.sh dcos-monitoring infra/monitoring/dcos-monitoring
+../core/check-status-with-name.sh monitoring infra/monitoring/dcos-monitoring
 
 ../core/deploy-edgelb.sh infra/network/dcos-edgelb
 
@@ -102,6 +104,7 @@ done
 cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/config
 ./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
 ./post-deploy-jenkins.sh ${APPNAME}/prod/k8s/cluster1
+./post-deploy-data-science-engine-flickr.sh ${APPNAME}/prod/k8s/cluster1
 
 ../core/update-nifi-permissions.sh ${APPNAME}/prod/dataservices/nifi
 ../core/rendertemplate.sh `pwd`/flickr.xml.template > `pwd`/flickr.xml

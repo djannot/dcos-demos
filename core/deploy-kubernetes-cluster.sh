@@ -5,7 +5,7 @@ if $2; then
   export K8SHA=true
 fi
 
-export K8SVERSION=2.4.0-1.15.1
+export K8SVERSION=2.4.1-1.15.2
 if [ ! -z "$3" ]; then
   export K8SVERSION=$3
 fi

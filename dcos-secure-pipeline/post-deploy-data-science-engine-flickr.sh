@@ -1,3 +1,8 @@
+export SERVICEPATH=$1
+export SERVICEACCOUNT=$(echo ${SERVICEPATH} | sed 's/\//-/g')
+
+export JENKINSK8STOKEN=$(kubectl --kubeconfig=../core/config.${SERVICEACCOUNT} describe secrets/jenkins-secret | grep "token:" | awk '{ print $2 }')
+
 ../core/rendertemplate.sh `pwd`/serve-model/Jenkinsfile.template > `pwd`/serve-model/Jenkinsfile
 if ${SECURE}; then
   ../core/rendertemplate.sh `pwd`/serve-model/serve-model.py.template.secure > `pwd`/serve-model/serve-model.py
