@@ -5,7 +5,9 @@
     "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
     "virtual_network_enabled": true,
     "virtual_network_name": "dcos",
-    "UCR_containerizer": true
+    "UCR_containerizer": true,
+    "role": "${APPNAME}",
+    "enforce_role": true
   },
   "hdfs": {
     "config-url": "http://api.${HDFSHOSTNAME}.marathon.l4lb.thisdcos.directory/v1/endpoints"

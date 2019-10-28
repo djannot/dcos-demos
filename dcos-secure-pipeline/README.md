@@ -13,7 +13,7 @@ There are also 2 additional demos:
 
 ## Prerequisites
 
-You need to provision a DC/OS Enterprise Edition cluster in either `permissive` or `strict` mode.
+You need to provision a DC/OS 2.0 Enterprise Edition cluster in either `permissive` or `strict` mode.
 
 It has been validated with CentOS 7.5 and the install script is deploying the `krb5-workstation` package that is needed for Kerberos.
 
@@ -142,17 +142,11 @@ Run the following command to launch jenkins in your web browser:
 ./open-jenkins.sh
 ```
 
-Go to `Manage Jenkins` and click on the `Correct` button on the top right corner.
-
-Check `Pipeline: API` and `Pipeline: Step API` and click on `Download now and install after restart`
-
-Check the option to restart automatically Jenkins.
-
-When Jenkins has restarted, click on `Manage Jenkins` and then on `Configure System`.
+Go to `Manage Jenkins` and click on `Configure System`.
 
 At the bottom, in the `Mesos cloud` section, click on `Advanced`.
 
-Update the value of `Idle Termination Minutes` to `1440`.
+Update the values of `Jenkins Slave Memory in MB` to `2048`, of `Jenkins Executor Memory in MB` to `2048` and of `Idle Termination Minutes` to `1440`.
 
 Click again on the other `Advanced` button.
 

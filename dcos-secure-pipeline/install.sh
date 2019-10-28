@@ -26,6 +26,18 @@ if [[ ! -z $2 ]]; then
   export PUBLICIP=$2
 fi
 
+# Create the folder with enforceRole = true
+dcos marathon group add --id=${APPNAME}
+
+# An existing folder can also be updated
+dcos marathon group update ${APPNAME} enforceRole=true
+
+# It's also possible to check the current Configuration
+# dcos marathon group show ${APPNAME}
+
+# Set the quota
+dcos quota create ${APPNAME} --cpu 80 --mem 102400 --disk 512000
+
 ./private-agents.sh
 
 dcos package install --yes --cli dcos-enterprise-cli
@@ -83,15 +95,20 @@ dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNOD
 
 ../core/check-status-with-name.sh monitoring infra/monitoring/dcos-monitoring
 
-../core/deploy-edgelb.sh infra/network/dcos-edgelb
+#../core/deploy-edgelb.sh infra/network/dcos-edgelb
+../core/deploy-edgelb.sh edgelb
 
 sleep 10
-until dcos edgelb ping; do sleep 1; done
-export SERVICEPATH=infra/network/dcos-edgelb
+#until dcos edgelb ping; do sleep 1; done
+until dcos edgelb --name=/edgelb ping; do sleep 1; done
+#export SERVICEPATH=infra/network/dcos-edgelb
+export SERVICEPATH=edgelb
 ../core/rendertemplate.sh `pwd`/pool-edgelb-all.json.template > `pwd`/pool-edgelb-all.json
-dcos edgelb create pool-edgelb-all.json
+#dcos edgelb create pool-edgelb-all.json
+dcos edgelb --name=/edgelb create pool-edgelb-all.json
 
-../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+#../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+../core/check-app-status.sh edgelb/pools/all
 
 ./update-etc-hosts.sh
 

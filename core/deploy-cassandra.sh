@@ -8,4 +8,4 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 ./grant-permissions.sh
 
 ./rendertemplate.sh options-cassandra.json.template > options-cassandra.json
-dcos package install --yes cassandra --options=options-cassandra.json --package-version=2.6.0-3.11.4
+dcos package install --yes cassandra --options=options-cassandra.json --package-version=2.7.0-3.11.4

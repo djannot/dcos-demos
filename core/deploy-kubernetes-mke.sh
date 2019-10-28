@@ -12,4 +12,4 @@ dcos security org users grant kubernetes dcos:mesos:master:framework:role:kubern
 dcos security org users grant kubernetes dcos:mesos:master:task:user:nobody create
 
 # Deploy kubernetes
-dcos package install --yes kubernetes --options=options-kubernetes-mke.json --package-version=2.4.1-1.15.2
+dcos package install --yes kubernetes --options=options-kubernetes-mke.json --package-version=2.4.5-1.15.5

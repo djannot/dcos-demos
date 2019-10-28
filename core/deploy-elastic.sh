@@ -12,4 +12,4 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:reservation:pr
 dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:volume:principal:${SERVICEACCOUNT} create
 
 ./rendertemplate.sh options-elastic.json.template > options-elastic.json
-dcos package install --yes elastic --options=options-elastic.json --package-version=2.7.0-6.8.1
+dcos package install --yes elastic --options=options-elastic.json --package-version=3.0.0-7.3.2

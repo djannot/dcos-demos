@@ -50,3 +50,45 @@ spec:
           serviceName: http-echo-2
           servicePort: 80
 EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: edgelb
+    kubernetes.dcos.io/dklb-config: |
+      name: dklb
+  labels:
+    owner: dklb
+  name: dklb-echo-2
+spec:
+  rules:
+  - host: http-echo-3.com
+    http:
+      paths:
+      - backend:
+          serviceName: http-echo-1
+          servicePort: 80
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: edgelb
+    kubernetes.dcos.io/dklb-config: |
+      name: dklb
+  labels:
+    owner: dklb
+  name: dklb-echo-3
+spec:
+  rules:
+  - host: http-echo-4.com
+    http:
+      paths:
+      - backend:
+          serviceName: http-echo-1
+          servicePort: 80
+EOF

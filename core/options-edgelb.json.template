@@ -1,6 +1,6 @@
 {
   "service": {
-    "name": "${SERVICEPATH}/api",
+    "name": "${SERVICEPATH}",
     "principal": "${SERVICEACCOUNT}",
     "secretName": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
     "mesosProtocol": "https"

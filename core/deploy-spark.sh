@@ -11,4 +11,4 @@ dcos security org users grant ${SERVICEACCOUNT} dcos:mesos:master:task:app_id:/$
 dcos security org users grant dcos_marathon dcos:mesos:master:task:user:nobody create
 
 ./rendertemplate.sh options-spark.json.template > options-spark.json
-dcos package install --yes spark --options=options-spark.json --package-version=2.8.0-2.4.0
+dcos package install --yes spark --options=options-spark.json --package-version=2.9.0-2.4.3

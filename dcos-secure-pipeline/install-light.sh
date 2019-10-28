@@ -54,15 +54,20 @@ dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNOD
 
 ../core/check-status-with-name.sh monitoring infra/monitoring/dcos-monitoring
 
-../core/deploy-edgelb.sh infra/network/dcos-edgelb
+#../core/deploy-edgelb.sh infra/network/dcos-edgelb
+../core/deploy-edgelb.sh edgelb
 
 sleep 10
-until dcos edgelb ping; do sleep 1; done
-export SERVICEPATH=infra/network/dcos-edgelb
+#until dcos edgelb ping; do sleep 1; done
+until dcos edgelb --name=/edgelb ping; do sleep 1; done
+#export SERVICEPATH=infra/network/dcos-edgelb
+export SERVICEPATH=edgelb
 ../core/rendertemplate.sh `pwd`/pool-edgelb-all.json.template > `pwd`/pool-edgelb-all.json
-dcos edgelb --name=infra/network/dcos-edgelb create pool-edgelb-all.json
+#dcos edgelb create pool-edgelb-all.json
+dcos edgelb --name=/edgelb create pool-edgelb-all.json
 
-../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+#../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+../core/check-app-status.sh edgelb/pools/all
 
 ./update-etc-hosts.sh
 

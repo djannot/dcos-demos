@@ -8,4 +8,4 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 ./grant-permissions.sh
 
 ./rendertemplate.sh options-kibana.json.template > options-kibana.json
-dcos package install --yes kibana --options=options-kibana.json --package-version=2.7.0-6.8.1
+dcos package install --yes kibana --options=options-kibana.json --package-version=3.0.0-7.3.2

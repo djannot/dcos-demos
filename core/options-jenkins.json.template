@@ -5,6 +5,10 @@
   },
   "service": {
     "name": "${SERVICEPATH}",
-    "user": "nobody"
+    "user": "root"
+  },
+  "roles": {
+    "jenkins-master-role": "${APPNAME}",
+    "jenkins-agent-role": "${APPNAME}"
   }
 }

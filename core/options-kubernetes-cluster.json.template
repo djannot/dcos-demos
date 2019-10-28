@@ -6,7 +6,8 @@
     "name": "${SERVICEPATH}",
     "service_account": "${SERVICEACCOUNT}",
     "service_account_secret": "/${SERVICEPATH}/private-${SERVICEACCOUNT}",
-    "use_agent_docker_certs": true
+    "use_agent_docker_certs": true,
+    "role": "${APPNAME}"
   },
   "kubernetes": {
     "authorization_mode": "RBAC",
