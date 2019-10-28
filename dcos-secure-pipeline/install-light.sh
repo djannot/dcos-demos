@@ -38,8 +38,6 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kafka.sh ${APPNAME}/prod/dataservices/kafka
 ../core/check-app-status.sh ${APPNAME}/prod/datascience/data-science-engine-cpu
 
-./post-deploy-data-science-engine-flickr.sh
-
 ../core/check-status-with-name.sh kafka ${APPNAME}/prod/dataservices/kafka
 
 dcos kafka --name=${APPNAME}/prod/dataservices/kafka topic create -p ${PUBLICNODES} photos
@@ -80,3 +78,4 @@ done
 cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/config
 ./post-deploy-kubernetes-cluster-flickr.sh ${APPNAME}/prod/k8s/cluster1
 ./post-deploy-jenkins.sh ${APPNAME}/prod/k8s/cluster1
+./post-deploy-data-science-engine-flickr.sh ${APPNAME}/prod/k8s/cluster1
