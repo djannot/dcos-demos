@@ -13,7 +13,6 @@ data "http" "whatismyip" {
 
 module "dcos" {
   source  = "dcos-terraform/dcos/aws"
-  custom_dcos_download_path = "http://downloads.mesosphere.com/dcos-enterprise/stable/2.0.0/dcos_generate_config.ee.sh"
   version = "~> 0.2.0"
 
   providers = {
@@ -30,7 +29,7 @@ module "dcos" {
   num_private_agents = "12"
   num_public_agents  = "2"
 
-  dcos_version = "1.13.3"
+  dcos_version = "2.0.0"
 
   dcos_variant              = "ee"
   dcos_license_key_contents = "${file("./license.txt")}"
