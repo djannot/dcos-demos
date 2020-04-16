@@ -26,10 +26,10 @@ module "dcos" {
   admin_ips           = ["0.0.0.0/0"]
 
   num_masters        = "1"
-  num_private_agents = "12"
+  num_private_agents = "15"
   num_public_agents  = "2"
 
-  dcos_version = "2.0.0"
+  dcos_version = "2.0.2"
 
   dcos_variant              = "ee"
   dcos_license_key_contents = "${file("./license.txt")}"

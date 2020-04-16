@@ -52,4 +52,4 @@ else
     ./rendertemplate.sh options-data-science-engine.json.template.nohdfs > options-data-science-engine.json
   fi
 fi
-dcos package install --yes data-science-engine --options=options-data-science-engine.json
+dcos package install --yes data-science-engine --options=options-data-science-engine.json --package-version=1.0.1

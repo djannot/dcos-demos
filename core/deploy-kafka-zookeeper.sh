@@ -8,4 +8,4 @@ export ROLE=$(echo ${SERVICEPATH} | sed 's/\//__/g')-role
 ./grant-permissions.sh
 
 ./rendertemplate.sh options-kafka-zookeeper.json.template > options-kafka-zookeeper.json
-dcos package install --yes kafka-zookeeper --options=options-kafka-zookeeper.json --package-version=2.6.0-3.4.14
+dcos package install --yes kafka-zookeeper --options=options-kafka-zookeeper.json --package-version=2.7.0-3.4.14

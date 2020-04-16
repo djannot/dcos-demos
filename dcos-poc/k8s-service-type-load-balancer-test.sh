@@ -1,4 +1,4 @@
-cat <<EOF | kubectl --kubeconfig=../core/config.poc-prod-k8s-cluster1 create -f -
+cat <<EOF | kubectl --kubeconfig=../core/config.${APPNAME}-prod-k8s-cluster1 create -f -
 apiVersion: v1
 kind: Pod
 metadata:
@@ -15,13 +15,12 @@ spec:
       protocol: TCP
 EOF
 
-cat <<EOF | kubectl --kubeconfig=../core/config.poc-prod-k8s-cluster1 create -f -
+cat <<EOF | kubectl --kubeconfig=../core/config.${APPNAME}-prod-k8s-cluster1 create -f -
 apiVersion: v1
 kind: Service
 metadata:
   annotations:
     kubernetes.dcos.io/dklb-config: |
-      constraints: "[[\"@region\", \"IS\", \"us-west-2\"]]"
       name: "dklb"
       size: ${PUBLICNODES}
       frontends:

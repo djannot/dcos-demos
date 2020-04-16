@@ -22,23 +22,28 @@ dcos package install --yes --cli dcos-enterprise-cli
 ../core/deploy-kubernetes-mke.sh
 ../core/check-kubernetes-mke-status.sh
 
-../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1 true 2.4.1-1.15.2
+../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster1 true 2.4.4-1.15.4
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster1
 
 ../core/deploy-kubernetes-cluster.sh ${APPNAME}/prod/k8s/cluster2 false
 ../core/check-kubernetes-cluster-status.sh ${APPNAME}/prod/k8s/cluster2
 
-dcos kubernetes cluster update --cluster-name=${APPNAME}/prod/k8s/cluster1 --package-version=2.4.2-1.15.3 --yes
+dcos kubernetes cluster update --cluster-name=${APPNAME}/prod/k8s/cluster1 --package-version=2.4.5-1.15.5 --yes
 
-../core/deploy-edgelb.sh infra/network/dcos-edgelb
+#../core/deploy-edgelb.sh infra/network/dcos-edgelb
+../core/deploy-edgelb.sh edgelb
 
 sleep 10
-until dcos edgelb ping; do sleep 1; done
-export SERVICEPATH=infra/network/dcos-edgelb
+#until dcos edgelb ping; do sleep 1; done
+until dcos edgelb --name=/edgelb ping; do sleep 1; done
+#export SERVICEPATH=infra/network/dcos-edgelb
+export SERVICEPATH=edgelb
 ../core/rendertemplate.sh `pwd`/pool-edgelb-all.json.template > `pwd`/pool-edgelb-all.json
-dcos edgelb create pool-edgelb-all.json
+#dcos edgelb create pool-edgelb-all.json
+dcos edgelb --name=/edgelb create pool-edgelb-all.json
 
-../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+#../core/check-app-status.sh infra/network/dcos-edgelb/pools/all
+../core/check-app-status.sh edgelb/pools/all
 
 ./update-etc-hosts.sh
 
@@ -50,13 +55,16 @@ cp ../core/config.$(echo ${APPNAME}/prod/k8s/cluster1 | sed 's/\//-/g') ~/.kube/
 # telnet $PUBLICIP 6379
 # quit
 
-./k8s-ingress-test.sh
+kubectl apply -f traefik.yaml
 
-curl -H "Host: http-echo-1.com" http://${PUBLICIP}:8080
-curl -H "Host: http-echo-2.com" http://${PUBLICIP}:8080
+#./k8s-ingress-test.sh
+./k8s-ingress-test-traefik.sh
 
-curl -k --resolve http-echo-1.com:8081:${PUBLICIP} https://http-echo-1.com:8081
-curl -k --resolve http-echo-2.com:8081:${PUBLICIP} https://http-echo-2.com:8081
+curl -H "Host: http-echo-1.com" http://${PUBLICIP}:${K8SINGRESSPORT}
+curl -H "Host: http-echo-2.com" http://${PUBLICIP}:${K8SINGRESSPORT}
+
+curl -k --resolve http-echo-1.com:${K8SINGRESSTLSPORT}:${PUBLICIP} https://http-echo-1.com:${K8SINGRESSTLSPORT}
+curl -k --resolve http-echo-2.com:${K8SINGRESSTLSPORT}:${PUBLICIP} https://http-echo-2.com:${K8SINGRESSTLSPORT}
 
 ./deploy-helm.sh
 

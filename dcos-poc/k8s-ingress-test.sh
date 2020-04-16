@@ -59,6 +59,11 @@ metadata:
     kubernetes.io/ingress.class: edgelb
     kubernetes.dcos.io/dklb-config: |
       name: dklb
+      size: ${PUBLICNODES}
+      frontends:
+        http:
+          mode: enabled
+          port: ${K8SINGRESSPORT}
   labels:
     owner: dklb
   name: dklb-echo-2
@@ -80,6 +85,11 @@ metadata:
     kubernetes.io/ingress.class: edgelb
     kubernetes.dcos.io/dklb-config: |
       name: dklb
+      size: ${PUBLICNODES}
+      frontends:
+        http:
+          mode: enabled
+          port: ${K8SINGRESSPORT}
   labels:
     owner: dklb
   name: dklb-echo-3
@@ -90,5 +100,37 @@ spec:
       paths:
       - backend:
           serviceName: http-echo-1
+          servicePort: 80
+EOF
+
+cat <<EOF | kubectl create -f -
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: edgelb
+    kubernetes.dcos.io/dklb-config: |
+      name: dklb
+      size: ${PUBLICNODES}
+      frontends:
+        http:
+          mode: enabled
+          port: ${K8SINGRESSPORT}
+  labels:
+    owner: dklb
+  name: dklb-echo
+spec:
+  rules:
+  - host: http-echo-1.com
+    http:
+      paths:
+      - backend:
+          serviceName: http-echo-1
+          servicePort: 80
+  - host: http-echo-2.com
+    http:
+      paths:
+      - backend:
+          serviceName: http-echo-2
           servicePort: 80
 EOF

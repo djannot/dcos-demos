@@ -6,7 +6,7 @@ WORKDIR /notebooks/librdkafka
 RUN ./configure --install-deps
 RUN make
 RUN make install
-RUN pip install --no-binary :all: confluent-kafka
+RUN pip install --no-binary :all: confluent-kafka==1.3.0
 RUN pip install Flask
 RUN pip install flickrapi
 ADD serve-model.py /

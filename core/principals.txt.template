@@ -28,6 +28,7 @@ zookeeper/zookeeper-2-node.${KAFKAZOOKEEPERHOSTNAME}.autoip.dcos.thisdcos.direct
 kafka/kafka-0-broker.${KAFKAHOSTNAME}.autoip.dcos.thisdcos.directory@MESOS.LAB
 kafka/kafka-1-broker.${KAFKAHOSTNAME}.autoip.dcos.thisdcos.directory@MESOS.LAB
 kafka/kafka-2-broker.${KAFKAHOSTNAME}.autoip.dcos.thisdcos.directory@MESOS.LAB
+hdfs/alluxio@MESOS.LAB
 hdfs@MESOS.LAB
 client@MESOS.LAB
 user1@MESOS.LAB
